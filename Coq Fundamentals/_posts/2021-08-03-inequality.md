@@ -5,6 +5,8 @@ date: 2021-08-03 00:00:02
 tag: Coq
 ---
 
+Click [here](/assets/coq/Inequality.v) for the corresponding Coq file.
+
 ## Discriminate
 
  Now we know how to manually prove an equality, without using `reflexivity`.

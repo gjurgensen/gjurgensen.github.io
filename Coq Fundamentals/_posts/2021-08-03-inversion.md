@@ -5,6 +5,8 @@ date: 2021-08-03 00:00:04
 Tag: Coq
 ---
 
+Click [here](/assets/coq/Inversion.v) for the corresponding Coq file.
+
 ## Inversion
 
  When I first learned about the `inversion` tactic, I was constantly getting it 
