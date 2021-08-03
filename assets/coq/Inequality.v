@@ -1,9 +1,9 @@
-(** ** 2. Discriminate *)
+(** ** Discriminate *)
 
-(** Now we know how to manually prove an equality, without using `reflexivity`.
+(** Now we know how to prove an equality without using `reflexivity`.
    On the other side of the coin, how do we prove inequality without `discriminate`?
 
-   Let's start with a simple inequality, i.e. a structural inequality. This time,
+   Let's start with a simple inequality: `1 <> 2`. This time,
    we'll skip right to the part where we cheat and print a generated proof term.
  *)
 
@@ -42,15 +42,16 @@ Check ((fun H: 1 = 2 =>
   ) I 2 H) : 1 <> 2
 ).
 
-(** We could in fact further reduce the term by eta reduction, but I think it is most digestable 
+(** We could in fact further reduce the term by η-reduction, but I think it is most digestable 
    in its current form.
 
    Recall that the type `1 <> 2` is equivalent to `1 = 2 -> False`. It should be no suprise
    then that our proof term is a function taking a proof term of `1 = 2`, and constructing
    a term of type `False`.
 
-   The crux of our proof is the leading `eq_ind` function. This is in fact the 
-   induction definition generated for the `eq` type. Let's check the type.
+   The crux of our proof is the leading `eq_ind` function. This is the
+   induction principal Coq generated for `eq`. Let's try to understand 
+   it by checking its type
  *)
 
 Check eq_ind.
@@ -59,17 +60,17 @@ Check eq_ind.
        P x -> forall y : A, x = y -> P y
  *)
 
-(** In english, this takes a dependent prop P, a proof of said proposition 
-   for term x, and finally a proof that `x = y`, before producing a proof 
-   of the proposition over y.
+(** In english, this takes a dependent prop `P`, a proof of said proposition 
+   for term `x`, and finally a proof that `x = y`, before producing a proof 
+   of the proposition over `y`.
 
-   This is certainly intuitive. If x and y are definitionally equal (as is 
+   This is certainly intuitive. If `x` and `y` are definitionally equal (as is 
    asserted by the `eq` type), then certainly they should be interchangeable.
 
-   Of course, in our example, x=1 and y=2 are definitionally *unequal*. We 
-   therefore use eq_ind to construct our contradiction. To do so, we choose 
-   our dependent proposition P such that it is obviously true for x=1, and 
-   obviously wrong for y=2. With this goal in mind, we reach the following 
+   Of course, in our example, `x`=`1` and `y`=`2` are definitionally *unequal*. We 
+   therefore use `eq_ind` to construct our contradiction. To do so, we choose 
+   our dependent proposition `P` such that it is obviously true for `x`=`1`, and 
+   obviously wrong for `y`=`2`. With this goal in mind, we reach the following 
    definition:
  *)
 Definition P := fun x =>
@@ -98,7 +99,7 @@ Check ((fun H: 1 = 2 => eq_ind 1 P I 2 H) : 1 <> 2).
    end
    ```
    
-   So long as `a` and `b` are structurally equal, the match statment will take one to 
+   So long as `a` and `b` are structurally unequal, the match statment will take one to 
    `True` and the other to `False`, setting the stage for our contradiction.
 
    And so, we have reached the heart of the discriminate tactic. `discriminate` will 
@@ -112,11 +113,11 @@ Check ((fun H: 1 = 2 => eq_ind 1 P I 2 H) : 1 <> 2).
    for a digression on Props and (in)equality.
 
    While not provable in Coq, many users decided to introduce the concept of proof 
-   irrelevance axiomatically. That is, they define such an axiom:
+   irrelevance axiomatically:
  *)
 Axiom proof_irrelevance: forall (P: Prop) (p1 p2: P), p1 = p2.
 
-(** That is, we are now permitting two terms of sort `Prop` to be considered equal,
+(** That is, we are now permitting two terms of sort Prop to be considered equal,
    *even if they are not definitionally equal*.
 
    Anytime you add an axiom to Coq, you must ensure that it is consistent. That is,
@@ -126,7 +127,7 @@ Axiom proof_irrelevance: forall (P: Prop) (p1 p2: P), p1 = p2.
    of a shared Prop type which we could prove unequal, in direct contradiction with 
    the axiom.
 
-   Think about what we just learned about inequalities, shouldn't such a proof be 
+   Thinking about what we just learned about inequalities, shouldn't such a proof be 
    rather trivial?
 
    Consider the following silly Prop:
@@ -164,7 +165,7 @@ Fail Definition P' := fun x =>
 
 (** Failure again! At least this error message is more informative...
 
-   Coq tells us that our elimination of x (our match term) is invalid, because a Prop cannot
+   Coq tells us that our elimination of `x` (our match term) is invalid, because a Prop cannot
    be eliminated to produce a term of sort Type (the same applies producing a term of sort 
    Set). There are many reasons for this restriction, and in fact we should be thankful for 
    it. Perhaps the most obvious is in terms of code extraction. Because the computational 
@@ -178,15 +179,15 @@ Fail Definition P' := fun x =>
    It also means that we can't prove an inequality of Props, even when it seems obvious by 
    structural differences.
 
-   In this case, our match term in P' eliminates a term of sort Prop and produces a Prop.
+   In this case, our match term in `P'` eliminates a term of sort Prop and produces a Prop.
    At first glance, this might appear consistent with the rules of Prop elimination. The
-   problem is in the type of P', foo -> Prop.
+   problem is in the type of `P'`, `foo -> Prop`.
  *)
 Check (foo -> Prop).
    
 (* foo -> Prop : Type *)
 
-(** Thus, if P' were typable, it would be a Type, constructed by inspection of 
+(** Thus, if `P'` were typable, it would be a Type, constructed by inspection of 
    a Prop `foo`. This is the point of the proof that Coq admirably rejects.
  *)
 

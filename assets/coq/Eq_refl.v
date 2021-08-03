@@ -1,9 +1,9 @@
-(** ** 1. eq_refl *)
+(** ** Reflexivity. *)
 
 (** Far and away the most confusing topic to me in Coq has been equality. When you, reader,
    first came across equalities, you were probably told that you can solve simple equalities 
-   by simplifying them, and then once the goal looks like `?x = ?x`, you can finish with 
-   magic `reflexivity`.
+   by simplifying them, and then once the goal looks like `?x = ?x`, you can finish it with 
+   the magic tactic `reflexivity`.
  *)
 Lemma one_one_two: 1 + 1 = 2.
 Proof using.
@@ -17,8 +17,9 @@ Proof using.
   reflexivity.
 
 (** One might assume that reflexivity is doing some complicated work behind the curtains -
-   including simplification. This is not the case, but one could certainly be excused for 
-   thinking so. *)
+   including simplification. In fact, it isn't really. The tactic is doing very little.
+   The heavy lifting is being done by Coq's type system. But I'm getting ahead of myself.
+ *)
 
 Defined.
 
@@ -49,9 +50,9 @@ Fail progress simpl.
 (* The command has indeed failed with message:
    Failed to progress
  *)
-(** But this is somewhat of a red herring. `reflexivity` can in a sense do some simplication,
-   but it is not doing it so explicitly. But we're getting ahead of ourselves. Let's take 
-   a step back and look at the definition of equality. *)
+(** But this is somewhat of a red herring. It is more a case of correlation than causation.
+`reflexivity` does not depend on `simpl`. To see what's going on here, we're going to
+need to look at Coq's definition of equality. *)
 
 Abort.
 
@@ -159,9 +160,10 @@ Check (length_cons 42 [] 0 length_nil : length [21 + 21] (999*0 + 1)).
 
 (** You might wonder how Coq is able to check that two terms are definitionally equal.
    Recall that Coq will not accept recursive definitions which it cannot verify to be 
-   terminating. Coq is therefore strongly normalizing. Two terms can be checked for 
-   definitional equality by reducing each to their normal form, then compared up to 
-   alpha-conversion.
+   terminating. Coq is therefore strongly normalizing. That is, every term will reduce 
+   to an irreducible normal form in a finite number of steps. This makes definitional
+   equality decidable, since we can simply reduce each term to their normal form and 
+   compare up to irrelevant factors, such as alpha-conversion.
 
    Definitional equality is sometimes also called intentional equality or convertibility.
    If you want to learn more about it, you can check out the docs page:

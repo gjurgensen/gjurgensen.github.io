@@ -84,9 +84,8 @@ Proof using.
    parameters to determine which cases are impossible.
 
    Conceptually, it is as if we are looking at the constructors, and reasoning about 
-   them in reverse. What constructors could have produced this term? The inversion 
-   in the direction of our reasoning of the constructors is what gives this process
-   its name.
+   them in reverse. What constructors could have produced this term? The name
+   "inversion" is intentionally suggestive of this backward reasoning over constructors.
 
    In this case, `inversion` solves our goal instantly, since there are no possible 
    cases.
@@ -113,7 +112,7 @@ Proof using.
  
 {% highlight Coq %}
   Undo.
-  assert (x_eq: x = 1) by exact eq_refl.
+  assert (x_eq: x = 1) by exact (eq_refl _).
 {% endhighlight %}
 
 
