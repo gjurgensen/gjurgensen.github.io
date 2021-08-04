@@ -8,5 +8,5 @@ permalink: /about/
 
 Hi! I'm a graduate student at the University of Kansas, pursuing a Master's degree in Computer Science. My interests include formal methods, functional programming, and type theory.
 
-- [Résumé](/assets/resume.pdf)
+- [Résumé](/assets/documents/resume.pdf)
 - [Github profile](https://github.com/gjurgensen)
