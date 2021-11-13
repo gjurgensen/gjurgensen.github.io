@@ -25,12 +25,12 @@ Let's jump in.
 
 `find` is a higher-order tactic which takes a tactic as an argument. It then applies said tactic to the first hypothesis to make progress.
 
-```coq
+{% highlight Coq %}
 Tactic Notation "find" tactic3(tac) :=
   match goal with 
   | H : _ |- _ => progress tac H
   end.
-```
+{% endhighlight %}
 
 This is useful shorthand when searching for a hypothesis, or when one would prefer not to use a hypothesis's name. For example, one could re-define the `assumption` tactic as `find (fun H => exact H)`.
 
@@ -38,9 +38,9 @@ There are a myriad of reasons one might want to avoid explicitly using an identi
 
 Before moving on, let's note a technical detail in the above definition. The `tac` argument is given the nonterminal `tactic3`. Tactic expressions have 6 precedence levels, with 0 representing maximal precedence, and 5 representing minimal precedence. Precedence is necessary to disambiguate tactic expressions like these:
 
-```coq
+{% highlight Coq %}
 a using b; c
-```
+{% endhighlight %}
 
 Is this interpreted as `a using (b; c)`, or `(a using b); c)`? This depends on the precedence of the argument `b` to `a`. At tactic level 3, which we will use all throughout this post for consistency, it is parsed as `(a using b); c`.
 
@@ -52,7 +52,7 @@ We introduce a family of such functions called `define`. The first version behav
 
 <!-- When one invokes the `assert` tactic, the proof is temporarily diverted to a separate goal, which once proved, becomes a hypothesis. Like nearly all tactics though, `assert` will "forget" the actual value of the term it built, and only remembers the type. This is desirable most of the time, but sometimes one would prefer to remember the term we just built. The `define` tactic does just that - it works like assert, but then remember the term that was built. -->
 
-```coq
+{% highlight Coq %}
 Tactic Notation "define" uconstr(c) "as" ident(H) :=
   unshelve evar (H : c).
 
@@ -65,7 +65,7 @@ Tactic Notation "define" uconstr(c) :=
 
 Tactic Notation "define" uconstr(c) "by" tactic(tac) :=
   define c; [solve[tac]|].
-```
+{% endhighlight %}
 
 Here, `evar` creates a unification variable of our desired type. Wrapping the tactic in `unshelve` immediately focuses the newly created unification variable into the first subgoal. Once we clear that goal, the new hypothesis will be available, as in `assert`, but this time, it will be fully visible, having just been built via unification.
 
@@ -75,13 +75,13 @@ You may notice from the above tactic definitions just how verbose and redundant 
 
 A common scenario in which we'd like to retain a term's definition is when we are trying to prove an existential. Therefore, we create a version of define which works specifically on existentials.
 
-```coq
+{% highlight Coq %}
 Tactic Notation "define" "exists" :=
   unshelve eexists.
 
 Tactic Notation "define" "exists" "by" tactic(tac) :=
   define exists; [solve[tac]|].
-```
+{% endhighlight %}
 
 Again, we use the `unshelve` trick, this time with `eexists`.
 
@@ -91,7 +91,7 @@ Again, we use the `unshelve` trick, this time with `eexists`.
 Given a functional hypothesis `H : forall a: A, B a`, or in the nondependent case,
 `H : A -> B`, `forward H` focuses the new subgoal `A`, which it then uses to specialize `H`. The name therefore comes from the concept of "forward reasoning".
 
-```coq
+{% highlight Coq %}
 Tactic Notation "forward" hyp(H):=
   match type of H with 
   | forall i: ?x, _ =>
@@ -105,7 +105,7 @@ Tactic Notation "forward" hyp(H):=
 
 Tactic Notation "forward" hyp(H) "by" tactic3(tac) :=
   forward H; [solve [tac]|].
-```
+{% endhighlight %}
 
 To accomplish our task, we use the previous `define` tactic to build our term, which we then specialize our hypothesis `H` with. We then remove the intermediate term from our hypotheses by unfolding its definition in the now specialized hypothesis `H`, and clear it.
 
@@ -117,7 +117,7 @@ Inversion in Coq can get downright *ugly*. The proof state is often absolutely l
 
 (Note: I did not come up with the `inv` and `invc` tactics myself. I found them originally in the [StructTact](https://github.com/uwplse/StructTact/blob/master/theories/StructTactics.v#L17https://github.com/uwplse/StructTact/blob/179bd5312e9d8b63fc3f4071c628cddfc496d741/theories/StructTactics.v#L17) library, and modified them to my liking).
 
-```coq
+{% highlight Coq %}
 Tactic Notation "subst!" :=
   subst;
   repeat match goal with 
@@ -144,7 +144,7 @@ Tactic Notation "invc" hyp(H) "as" simple_intropattern(pat) :=
   rename H into _temp;
   inv _temp as pat;
   try clear _temp.
-```
+{% endhighlight %}
 
 Beyond the behavior I described, you can see in these definitions some extra features. For instance, we strengthen `subst` to clear syntactically reflexive equalities, and we rename to-be-cleared hypotheses to free up identifiers.
 
@@ -154,9 +154,9 @@ We can continue making improvements on inversion. One very common issue arises w
 
 The axiom we need is any one of the many variants of a class of axioms called "UIP" (Uniqueness of Identity Proofs). Here is one such axiom:
 
-```coq
+{% highlight Coq %}
 Axiom uip_refl : forall A (a: A) (h : a = a), h = eq_refl a.
-```
+{% endhighlight %}
 
 Hopefully this is quite intuitive. Given our inductive definition of `eq`, it may even be surprising that we can't derive this proposition. `eq_refl` is the only constructor of the equality type, so it stands to reason that any proof of `a = a` must be convertible to `eq_refl a`. As this post is not about axioms, I won't dive into *why* this proposition is unprovable. Suffice to say, it is perfectly innocuous (unless combined with more exotic axioms, such as univalence) and extremely helpful.
 
@@ -164,7 +164,7 @@ We can use Coq's variant of the UIP axiom by exporting `Coq.Logic.EqDep` (their 
 
 We then introduce a variant of our inversion tactic called `dependent inv` to leverage the extra power of this axiom:
 
-```coq
+{% highlight Coq %}
 Require Import Coq.Logic.EqDep.
 
 Ltac destr_sigma_eq :=
@@ -192,11 +192,11 @@ Tactic Notation "dependent" "invc" hyp(H) "as" simple_intropattern(pat) :=
   invc H as pat;
   destr_sigma_eq;
   subst!.
-```
+{% endhighlight %}
 
 <!-- We can make one last improvement to inversion, or more specifically, to our `subst!` tactic. The regular `subst` tactic simply rewrites and clears equalities where one side is a variable. But rewriting is not necessarily limited to the traditional equality. We can generalize the tactic to arbitrary binary relations with an instance of the `RewriteRelation` class (see [Generalized Rewriting](https://coq.inria.fr/refman/addendum/generalized-rewriting.html)).
 
-```coq
+{% highlight Coq %}
 Definition get_instance {A} (class: A -> Prop) (a: A) {instance: class a}
   : class a := instance.
 
@@ -244,7 +244,7 @@ Ltac clear_reflexives :=
 Tactic Notation "subst!" :=
   setoid_subst;
   clear_reflexives.
-```
+{% endhighlight %}
 
 In the definition above, `get_instance` might look a bit silly at first glance, since it just returns one of its arguments. Actually, it is quite useful. The argument is returns is an implicit class instance. Therefore, the definition allows us to leverage class inference from Ltac, as we do in the `has_instance` tactic to check whether an instance is inferrable.
 
@@ -256,7 +256,7 @@ Finally, we generalize the clearing of reflexive equalities from the original `s
 
 Sometimes, one's hypothesis is just too specific, and needs to be weakened. In particular, this issue often arises as we prepare to induct on a hypothesis. The tactic `gen x := y to P in H` will replace term `y` in `H` with the variable `x`, where `x` satisfies the predicate `P`. The definition of `x` is then discarded. It therefore "generalizes" `y` up to the predicate.
 
-```coq
+{% highlight Coq %}
 (* A version of cut where the assumption is the first subgoal *)
 Ltac cut_flip p :=
   let H := fresh in
@@ -278,7 +278,7 @@ Tactic Notation "gen" ident(I) ":=" constr(l) "to" uconstr(P) "in" hyp(H) :=
     ].
 
 ...
-```
+{% endhighlight %}
 I define many more variants of `gen / to`, for example with a `by` clause, but the implementations are all obvious, following the general idioms followed by the standard tactics.
 
 6. `foreach`, `forsome`, and other list-based tactics
@@ -295,15 +295,15 @@ A non-pair `x` is therefore interpreted as the single-element list. Of course, a
 
 The only thing missing is a notion an empty heterogenous list. We might consider the unit value for this, but as we have enough ambiguity at the moment, we'll instead introduce a distinguished type and value for this purpose.
 
-```coq
+{% highlight Coq %}
 Inductive Hnil : Set := hnil.
-```
+{% endhighlight %}
 
 This creates some ambiguity of its own, as there are now two ways to represent singleton lists. Either as `x` of `(hnil, x)`.
 
 With our representation decided, we can define some list tactics!
 
-```coq
+{% highlight Coq %}
 Ltac _foreach ls ftac :=
   lazymatch ls with 
   | hnil => idtac
@@ -324,7 +324,7 @@ Ltac _forsome ls ftac :=
   end.
 Tactic Notation "forsome" constr(ls) tactic3(ftac) :=
   _forsome ls ftac.
-```
+{% endhighlight %}
 
 There are a number of interesting aspects of these definitions. First, why do we define both `_foreach` and `foreach`? Well, we'd prefer the tactic notation used in the `foreach` definition, however tactic notations are un-recursive. Therefore, we must first define the recursive tactic `_foreach`, and then wrap it in the notation defined by `foreach`.
 
@@ -332,18 +332,18 @@ Second, notice we use `lazymatch`. This is because there is ambiguity in our cas
 
 Why stop there, let's create some more list-based tactics!
 
-```coq
+{% highlight Coq %}
 Ltac syn_eq H H' :=
   match H with 
   | H' => true
   end.
 
 Ltac in_list H ls := (forsome ls (syn_eq H)) + fail 0 H "not in list".
-```
+{% endhighlight %}
 
 `in_list` simply uses `forsome` to check if an element occurs in a list (up to syntactic equality, not convertibility).
 
-```coq
+{% highlight Coq %}
 Ltac _env ls cont :=
   match goal with
   | H : _ |- _ =>
@@ -352,11 +352,11 @@ Ltac _env ls cont :=
   end + (cont ls).
 Tactic Notation "env" tactic3(cont) :=
   _env hnil cont.
-```
+{% endhighlight %}
 
 `env` will create a list of all of the hypotheses in our current environment (i.e. proof state). However, tactics can't easily "return" values, so we are instead forced into a continuation-passing paradigm in order to use value built by `env`. The second argument to `env` is its continuation, which should be a tactic function expecting a list as an argument. For more information on this strategy, see section 14.3, "Functional Programming in Ltac", in Chlipala's [*Certified Programming with Dependent Types*](http://adam.chlipala.net/cpdt/cpdt.pdf#section.14.3).
 
-```coq
+{% highlight Coq %}
 Ltac _list_minus ls1 ls2 keep cont :=
   lazymatch ls1 with
   | hnil => cont keep
@@ -373,20 +373,20 @@ Ltac _list_minus ls1 ls2 keep cont :=
   end.
 Tactic Notation "list_minus" constr(ls1) constr(ls2) tactic3(cont) :=
   _list_minus ls1 ls2 hnil cont.
-```
+{% endhighlight %}
 
 Now we define `list_minus` to take the difference of two lists. Again, this is necessarily done in a continuation-passing style.
 
 Putting `env` and `list_minus` together, we get `env_delta`:
 
-```coq
+{% highlight Coq %}
 Tactic Notation "env_delta" tactic3(tac) tactic3(cont) :=
   env (fun old =>
   tac;
   env (fun new =>
   list_minus new old cont
   )).
-```
+{% endhighlight %}
 
 Here, we build a list only of the *new* hypotheses introduced into the environment by `tac` by subtracting our old list environment by the new post-`tac` list environment.
 
@@ -398,7 +398,7 @@ For instance, consider the proposition `R^* 0 x`, where `R^*` is the reflexive-t
 
 To accomplish this task, we are going to need to introduce a number of helpful intermediate tactics.
 
-```coq
+{% highlight Coq %}
 Ltac _repeat_count tac cont n :=
   if tac then 
     _repeat_count tac cont (S n)
@@ -407,7 +407,7 @@ Ltac _repeat_count tac cont n :=
 
 Tactic Notation "repeat_count" tactic3(tac) tactic3(cont) := 
   _repeat_count tac cont 0.
-```
+{% endhighlight %}
 
 Our first helper is a refinement of the standard `repeat` tactic. Just like `repeat`, it will apply a tactic 0 or more times, stopping at the first failure. `repeat_count` expands on this functionality by counting the number of successful applications. We will see soon why this might be useful.
 
@@ -415,7 +415,7 @@ Note that this uses the continuation-passing style discussed in our introduction
 
 Knowing that some tactic has been applied `n` times, we would perhaps like to perform another tactic `n` times. This is precisely the role of the `do` tactic. However, the `do` tactic only accepts Ltac's internal notion of integers, which is distinct from the Gallina representation of natural numbers as used by the `repeat_count` tactic. Therefore, we give an alternative definition of `do`, called `do_g` which uses Gallina's naturals.
 
-```coq
+{% highlight Coq %}
 Ltac _do_g n tac :=
   match n with 
   | S ?n' => tac; _do_g n' tac
@@ -423,11 +423,11 @@ Ltac _do_g n tac :=
   end.
 Tactic Notation "do_g" constr(n) tactic3(tac) :=
   _do_g n tac.
-```
+{% endhighlight %}
 
 Finally, we can define our improved induction tactic, called `induct`.
 
-```coq 
+{% highlight Coq %} 
 Ltac gen_eq_something H :=
   match type of H with
   | context[_ ?x] => 
@@ -458,7 +458,7 @@ Tactic Notation "induct" hyp(H) "using" uconstr(c) :=
 
 Tactic Notation "induct" hyp(H) "as" simple_intropattern(pat) "using" uconstr(c) :=
   _induct_by H ltac:(fun hyp => induction hyp as pat using c).
-```
+{% endhighlight %}
 
 The first definition, `gen_eq_something`, simply looks for a non-variable argument in the hypothesis `H` to generalize up to equality. The second tactic, `intro_try_rew`, does `intro`, but simultaneously tries fancier introductions which destructs/rewrites the equality. Finally, `_induct_by` puts it everything together. We `gen_eq_something` our inductive term as much as possible. Note this will add equality assumptions to our goal. Now, we perform the induction given by `inductStep`, and on each subgoal, we will introduce each of the equalities we added by `gen_eq_something`.
 
@@ -466,7 +466,7 @@ If you have ever used `dependent induction`, `induct` is trying to do the same t
 
 One annoying problem with our `induct` tactic (and `dependent induction`, for that matter) is that we often end up with inductive hypotheses of the form `x = x -> y` (or `forall x, x = y -> z`), which are trivial but annoying to simplify. To solve these, I include a tactic variant `induct!`, which is more eager to clean up the hypothesis state.
 
-```coq
+{% highlight Coq %}
 Tactic Notation "`" tactic(tac) := tac.
 
 (* Specialize hypothesis with a unification variable *)
@@ -514,7 +514,7 @@ Tactic Notation "induct!" hyp(H) "using" uconstr(c) :=
 
 Tactic Notation "induct!" hyp(H) "as" simple_intropattern(pat) "using" constr(c) :=
   _induct_excl_by H ltac:(fun hyp => induction hyp as pat using c).
-```
+{% endhighlight %}
 
 We create a tactic called `ecut_eq` which will look for equality assumptions in a hypothesis, and attempt to resolve them automatically, potentially specializing the hypothesis with unification variables to do so, as long as no unification variables remain by the end.
 
@@ -530,7 +530,7 @@ I wish I could explain when adding the backtick is necessary. The truth is, I do
 
 Finally, we add one more feature to our custom induction. Often, we are tasked with manually reverting variables before inducting in order to maximally generalize our inductive hypothesis. Then, we have to re-`intro`s them. Since there is no harm "over"-generalizing our inductive hypothesis in this way, we can automatically revert and re-`intro`s all of our variables.
 
-```coq
+{% highlight Coq %}
 Tactic Notation "do_generalized" constr(ls) tactic3(tac) :=
   repeat_count (
     find (fun H =>
@@ -560,7 +560,7 @@ Tactic Notation "max" "induct!" hyp(H) "as" simple_intropattern(pat) :=
   _induct_excl_by H ltac:(fun hyp => max induction hyp as pat).
 
 ...
-```
+{% endhighlight %}
 
 8. `tedious`/`follows`
 
@@ -568,7 +568,7 @@ I'll end with a tactic which has been extremely useful to me, but I'd also consi
 
 I originally envisioned `tedious`/`follows` as slightly more powerful versions of `easy`/`now`, but I quickly found myself adding more and more functionality until these had become quite ambitious tactics. Still, I have tried to retain one important characteristic: that it be relatively quick to fail. Here they are in their current form:
 
-```coq
+{% highlight Coq %}
 (* Induction failure occasionally produces odd warnings:
      https://github.com/coq/coq/issues/10766
    We silence these warnings with the following setting.
@@ -621,7 +621,7 @@ Tactic Notation "after" tactic3(tac) :=
 
 Tactic Notation "tedious" "using" constr(lemmas) :=
   follows (foreach lemmas (fun H => epose proof H)).
-```
+{% endhighlight %}
 
 As you can see, `tedious` is a sort of brute force heuristic tactic to solve "straightforward" goals. It uses `auto; easy` (or `eauto; easy` if we expect there to be unificaiton variables) as its immediate solver. If the goal is not immediately solvable, it will try some step and recurse. Of course, we would have no reason to expect this to terminate by itself, so we start `tedious` with some "gas". Each time it recurses, it loses gas, and when it gets to 0, it gives up. This "gas" is therefore the maximum search depth. By default, tedious starts with 5 gas. We note that increasing the gas will slow it down exponentially, since *each subgoal* `tedious` encounters will have more gas, meaning it will be more likely to produce more subgoals/hypotheses.
 
