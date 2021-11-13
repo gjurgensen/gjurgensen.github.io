@@ -48,14 +48,14 @@ We introduce a family of such functions called `define`. The first version behav
 Tactic Notation "define" uconstr(c) "as" ident(H) :=
   unshelve evar (H : c).
 
-Tactic Notation "define" uconstr(c) "as" ident(H) "by" tactic(tac) :=
+Tactic Notation "define" uconstr(c) "as" ident(H) "by" tactic3(tac) :=
   define c as H; [solve[tac]|].
 
 Tactic Notation "define" uconstr(c) :=
   let H := fresh in
   define c as H.
 
-Tactic Notation "define" uconstr(c) "by" tactic(tac) :=
+Tactic Notation "define" uconstr(c) "by" tactic3(tac) :=
   define c; [solve[tac]|].
 {% endhighlight %}
 
@@ -71,7 +71,7 @@ A common scenario in which we'd like to retain a term's definition is when we ar
 Tactic Notation "define" "exists" :=
   unshelve eexists.
 
-Tactic Notation "define" "exists" "by" tactic(tac) :=
+Tactic Notation "define" "exists" "by" tactic3(tac) :=
   define exists; [solve[tac]|].
 {% endhighlight %}
 
@@ -400,7 +400,7 @@ If you have ever used `dependent induction`, `induct` is trying to do the same t
 One annoying problem with our `induct` tactic (and `dependent induction`, for that matter) is that we often end up with inductive hypotheses of the form `x = x -> y` (or `forall x, x = y -> z`), which are trivial but annoying to simplify. To solve these, I include a tactic variant `induct!`, which is more eager to clean up the hypothesis state.
 
 {% highlight Coq %}
-Tactic Notation "`" tactic(tac) := tac.
+Tactic Notation "`" tactic3(tac) := tac.
 
 (* Specialize hypothesis with a unification variable *)
 Ltac especialize H := 
