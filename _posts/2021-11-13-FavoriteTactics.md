@@ -34,13 +34,7 @@ This is useful shorthand when searching for a hypothesis, or when one would pref
 
 There are a myriad of reasons one might want to avoid explicitly using an identifier. It can be easier (as is the case with `assumption`), but it can also be more maintainable. Identifiers within a proof are fragile, especially if introduced implicitly.
 
-Before moving on, let's note a technical detail in the above definition. The `tac` argument is given the nonterminal `tactic3`. Tactic expressions have 6 precedence levels, with 0 representing maximal precedence, and 5 representing minimal precedence. Precedence is necessary to disambiguate tactic expressions like these:
-
-{% highlight Coq %}
-a using b; c
-{% endhighlight %}
-
-Is this interpreted as `a using (b; c)`, or `(a using b); c)`? This depends on the precedence of the argument `b` to `a`. At tactic level 3, which we will use all throughout this post for consistency, it is parsed as `(a using b); c`.
+Before moving on, let's note a technical detail in the above definition. The `tac` argument is given the nonterminal `tactic3`. Tactic expressions have 6 precedence levels, with 0 representing maximal precedence, and 5 representing minimal precedence. Precedence is necessary to disambiguate tactic expressions such as `a by b; c`. Should this be interpreted as `a by (b; c)`, or `(a by b); c`? This depends on the precedence of the argument `b` to `a`. At tactic level 3, which we will use all throughout this post for consistency, it is parsed as `(a by b); c`.
 
 # 2. `define`
 
@@ -192,64 +186,6 @@ Tactic Notation "dependent" "invc" hyp(H) "as" simple_intropattern(pat) :=
   subst!.
 {% endhighlight %}
 
-<!-- We can make one last improvement to inversion, or more specifically, to our `subst!` tactic. The regular `subst` tactic simply rewrites and clears equalities where one side is a variable. But rewriting is not necessarily limited to the traditional equality. We can generalize the tactic to arbitrary binary relations with an instance of the `RewriteRelation` class (see [Generalized Rewriting](https://coq.inria.fr/refman/addendum/generalized-rewriting.html)).
-
-{% highlight Coq %}
-Definition get_instance {A} (class: A -> Prop) (a: A) {instance: class a}
-  : class a := instance.
-
-Tactic Notation "has_instance" uconstr(class) uconstr(a) :=
-  let _ := constr:(get_instance class a) in
-  idtac.
-
-Tactic Notation "setoid_subst" hyp(H) :=
-  match type of H with 
-  | ?R ?A ?x ?y =>
-      has_instance RewriteRelation (R A);
-      ( is_var x;
-        try rewrite H in *;
-        clear H x
-      ) + (
-        is_var y;
-        try rewrite <- H in *;
-        clear H y
-      )
-  | ?R ?x ?y =>
-      has_instance RewriteRelation R;
-      ( is_var x;
-        try rewrite H in *;
-        clear H x
-      ) + (
-        is_var y;
-        try rewrite <- H in *;
-        clear H y
-      )
-  end.
-
-Tactic Notation "setoid_subst" :=
-  repeat find (fun H => setoid_subst H).
-
-Ltac clear_reflexives :=
-  repeat match goal with 
-  | H : ?R ?A ?x ?x |- _ =>
-      has_instance Reflexive (R A);
-      clear H
-  | H : ?R ?x ?x |- _ =>
-      has_instance Reflexive R;
-      clear H
-  end.
-
-Tactic Notation "subst!" :=
-  setoid_subst;
-  clear_reflexives.
-{% endhighlight %}
-
-In the definition above, `get_instance` might look a bit silly at first glance, since it just returns one of its arguments. Actually, it is quite useful. The argument is returns is an implicit class instance. Therefore, the definition allows us to leverage class inference from Ltac, as we do in the `has_instance` tactic to check whether an instance is inferrable.
-
-The `setoid_subst H` tactic checks that `H` is a relation, and that it has a `RewriteRelation` instance (the tactic is much less performant if we don't check since we would spend significant time trying and failing to rewrite with non-rewritable relations). We finish by rewriting, with the direction determined by whether the left or right argument is a variable, and clearing.
-
-Finally, we generalize the clearing of reflexive equalities from the original `subst!` definition, now to any registered reflexive relation. -->
-
 # 5. `gen / to`
 
 Sometimes, one's hypothesis is just too specific, and needs to be weakened. In particular, this issue often arises as we prepare to induct on a hypothesis. The tactic `gen x := y to P in H` will replace term `y` in `H` with the variable `x`, where `x` satisfies the predicate `P`. The definition of `x` is then discarded. It therefore "generalizes" `y` up to the predicate.
@@ -286,8 +222,7 @@ hypotheses. For instance, a `foreach` combinator could apply some tactic to ever
 
 This immediate issue we run into is that hypotheses will generally have different types, whereas a Gallina list is necessarily homogenous in type. We could certainly overcome this issue with enough force. For instance, we could use a list of type-value pairs (`list {x & x}`), but this quickly get's exhausting. We are forced to manually track types, and we must be careful to keep list elements in a canonical form which our Ltac can parse entirely syntactically. Far more convenient is to embrace Ltac's dynamic typing, and introduce a notion of heterogeneous lists.
 
-Actually, we don't need to create very many new definitions. Instead, we re-purpose Gallina's tuples. Recall that the tuple `(a, b, ..., y, z)` actually de-sugars into the left-nested pairs `((((a, b), ...), y), z)`. We therefore interpret an arbitrary length 
-"flat" tuple as a non-empty heterogeneous list, where `(t, h)` represent the "cons" of `h` to `t`.
+Actually, we don't need to create very many new definitions. Instead, we re-purpose Gallina's tuples. Recall that the tuple `(a, b, ..., y, z)` actually de-sugars into the left-nested pairs `((((a, b), ...), y), z)`. We therefore interpret an arbitrary-length "flat" tuple as a non-empty heterogeneous list, where `(t, h)` represent the "cons" of `h` to `t`.
 
 A non-pair `x` is therefore interpreted as the single-element list. Of course, a heterogeneous list of pairs is therefore an ambiguous notion which ought to be avoided.
 
@@ -297,7 +232,7 @@ The only thing missing is a notion an empty heterogenous list. We might consider
 Inductive Hnil : Set := hnil.
 {% endhighlight %}
 
-This creates some ambiguity of its own, as there are now two ways to represent singleton lists. Either as `x` of `(hnil, x)`.
+This creates some ambiguity of its own, as there are now two ways to represent singleton lists. Either as `x` or `(hnil, x)`.
 
 With our representation decided, we can define some list tactics!
 
@@ -352,7 +287,7 @@ Tactic Notation "env" tactic3(cont) :=
   _env hnil cont.
 {% endhighlight %}
 
-`env` will create a list of all of the hypotheses in our current environment (i.e. proof state). However, tactics can't easily "return" values, so we are instead forced into a continuation-passing paradigm in order to use value built by `env`. The second argument to `env` is its continuation, which should be a tactic function expecting a list as an argument. For more information on this strategy, see section 14.3, "Functional Programming in Ltac", in Chlipala's [*Certified Programming with Dependent Types*](http://adam.chlipala.net/cpdt/cpdt.pdf#section.14.3).
+`env` will create a list of all of the hypotheses in our current environment (i.e. proof state). However, tactics can't easily "return" values, so we are instead forced into a continuation-passing paradigm in order to use the value built by `env`. The second argument to `env` is its continuation, which should be a tactic function expecting a list as an argument. For more information on this strategy, see section 14.3, "Functional Programming in Ltac", in Chlipala's [*Certified Programming with Dependent Types*](http://adam.chlipala.net/cpdt/cpdt.pdf#section.14.3).
 
 {% highlight Coq %}
 Ltac _list_minus ls1 ls2 keep cont :=
@@ -386,11 +321,11 @@ Tactic Notation "env_delta" tactic3(tac) tactic3(cont) :=
   )).
 {% endhighlight %}
 
-Here, we build a list only of the *new* hypotheses introduced into the environment by `tac` by subtracting our old list environment by the new post-`tac` list environment.
+Here, we build a list only of the *new* hypotheses introduced into the environment by `tac`. We do this by grabbing the environment before and after `tac` is executed, and then calculating their difference.
 
 # 7. `(max) induct(!)`
 
-The standard `induction` tactic can be surprisingly lacking in a couple of ways. First, it discards information when the arguments to the inductive argument are not simple variables.
+The standard `induction` tactic can be surprisingly lacking in a couple of ways. First, it discards information when the arguments to the inductive term are not simple variables.
 
 For instance, consider the proposition `R^* 0 x`, where `R^*` is the reflexive-transitive closure of `R`. We would like to induct over the structure of the proof (a sequence of relation steps). However, if we were to invoke the regular `induction` tactic, it would replace `0` with an arbitrary variable, thereby losing that information. We can solve this issue by first replacing the `0` with a variable ourselves, and creating a separate assumption equating the variable to the value it substitutes before its definition is erased by `induction`.
 
@@ -425,7 +360,7 @@ Tactic Notation "do_g" constr(n) tactic3(tac) :=
 
 Finally, we can define our improved induction tactic, called `induct`.
 
-{% highlight Coq %} 
+{% highlight Coq %}
 Ltac gen_eq_something H :=
   match type of H with
   | context[_ ?x] => 
@@ -458,7 +393,7 @@ Tactic Notation "induct" hyp(H) "as" simple_intropattern(pat) "using" uconstr(c)
   _induct_by H ltac:(fun hyp => induction hyp as pat using c).
 {% endhighlight %}
 
-The first definition, `gen_eq_something`, simply looks for a non-variable argument in the hypothesis `H` to generalize up to equality. The second tactic, `intro_try_rew`, does `intro`, but simultaneously tries fancier introductions which destructs/rewrites the equality. Finally, `_induct_by` puts it everything together. We `gen_eq_something` our inductive term as much as possible. Note this will add equality assumptions to our goal. Now, we perform the induction given by `inductStep`, and on each subgoal, we will introduce each of the equalities we added by `gen_eq_something`.
+The first definition, `gen_eq_something`, simply looks for a non-variable argument in the hypothesis `H` to generalize up to equality. The second tactic, `intro_try_rew`, does `intro`, but simultaneously tries fancier introductions which destructs/rewrites the equality. Finally, `_induct_by` puts everything together. We `gen_eq_something` our inductive term as much as possible. Note this will add equality assumptions to our goal. Now, we perform the induction given by `inductStep`, and on each subgoal, we will introduce each of the equalities we added by `gen_eq_something`.
 
 If you have ever used `dependent induction`, `induct` is trying to do the same thing, sometimes called "inversion-induction", because it can be seen as simultaneously trying to invert and induct on the hypothesis. If `dependent induction` does the same thing, why did we just re-create the functionality? Well, `dependent induction` actually uses the heterogenous equality `JMeq`, and uses the same UIP axiom we mentioned with `dependent inv`. Therefore, `induct` is something of a simpler variation of `dependent induction`.
 
