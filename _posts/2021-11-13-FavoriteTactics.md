@@ -333,7 +333,7 @@ To accomplish this task, we are going to need to introduce a number of helpful i
 
 {% highlight Coq %}
 Ltac _repeat_count tac cont n :=
-  if tac then 
+  tryif tac then 
     _repeat_count tac cont (S n)
   else 
     cont n.
