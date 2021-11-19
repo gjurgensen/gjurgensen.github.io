@@ -10,3 +10,4 @@ Hi! I'm a graduate student at the University of Kansas, pursuing a Master's degr
 
 - [Résumé](/assets/documents/resume.pdf)
 - [Github profile](https://github.com/gjurgensen)
+- [GPG Public Key](/assets/GrantJurgensen.asc)
