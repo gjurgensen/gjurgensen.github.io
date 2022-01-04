@@ -1,11 +1,13 @@
 ---
 layout: post
-title: "Coq Fundamentals: Equality IV"
+title: "Coq Equality IV"
 date: 2021-08-03 00:00:04
 Tag: Coq
 ---
 
-Click [here](/assets/coq/Inversion.v) for the corresponding Coq file.
+{% include mathjax.html %}
+
+<!-- Click [here](/assets/coq/Inversion.v) for the corresponding Coq file. -->
 
 ## Inversion
 
@@ -15,8 +17,8 @@ Click [here](/assets/coq/Inversion.v) for the corresponding Coq file.
    before realizing my mistake.
 
    In fact, the two are quite similar in their goal. `destruct` is the classic means 
-   of case analysis. When one invokes `destruct x`, the proof branches into n proof 
-   goals, for the n constructors of the inductive type `x`.
+   of case analysis. When one invokes `destruct x`, the proof branches into $n$ proof 
+   goals, for the $n$ constructors of the inductive type `x`.
 
    Let's take a look at what a proof using `destruct` looks like under the hood.
  

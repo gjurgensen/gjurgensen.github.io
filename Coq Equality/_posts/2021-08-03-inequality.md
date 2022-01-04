@@ -1,20 +1,18 @@
 ---
 layout: post
-title: "Coq Fundamentals: Equality II"
+title: "Coq Equality II"
 date: 2021-08-03 00:00:02
 tag: Coq
 ---
 
-Click [here](/assets/coq/Inequality.v) for the corresponding Coq file.
+<!-- Click [here](/assets/coq/Inequality.v) for the corresponding Coq file. -->
 
-## Discriminate
+## Inequality
 
- Now we know how to prove an equality without using `reflexivity`.
-   On the other side of the coin, how do we prove inequality without `discriminate`?
+Last time we learned how to prove an equality without using `reflexivity`.
+On the other side of the coin, how do we prove inequality without `discriminate`?
 
-   Let's start with a simple inequality: `1 <> 2`. This time,
-   we'll skip right to the part where we cheat and print a generated proof term.
- 
+Let's start with a simple inequality: `1 <> 2`. What sort of proof term would `discriminate` generate?
 
 {% highlight Coq %}
 Lemma neq_1_2 : 1 <> 2.
@@ -39,11 +37,8 @@ Print neq_1_2.
         : 1 <> 2
  *)
 {% endhighlight %}
-
     
- Well, this wasn't as simple as we might have hoped. Let me do the dirty work of cutting 
-   it down to its leanest form:
- 
+Well, this wasn't as simple as we might have hoped. After trimming it down a bit, it starts to become a little more digestible:
 
 {% highlight Coq %}
 Check ((fun H: 1 = 2 =>
@@ -56,9 +51,7 @@ Check ((fun H: 1 = 2 =>
 ).
 {% endhighlight %}
 
-
- We could in fact further reduce the term by η-reduction, but I think it is most digestable 
-   in its current form.
+(We could in fact further reduce the term by η-reduction, but I'm not sure that enhances readability here).
 
    Recall that the type `1 <> 2` is equivalent to `1 = 2 -> False`. It should be no suprise
    then that our proof term is a function taking a proof term of `1 = 2`, and constructing
@@ -82,14 +75,17 @@ Check eq_ind.
    for term `x`, and finally a proof that `x = y`, before producing a proof 
    of the proposition over `y`.
 
-   This is certainly intuitive. If `x` and `y` are definitionally equal (as is 
-   asserted by the `eq` type), then certainly they should be interchangeable.
+   <!-- This is certainly intuitive. If `x` and `y` are definitionally equal (as is 
+   asserted by the `eq` type), then certainly they should be interchangeable. -->
 
-   Of course, in our example, `x`=`1` and `y`=`2` are definitionally *unequal*. We 
-   therefore use `eq_ind` to construct our contradiction. To do so, we choose 
-   our dependent proposition `P` such that it is obviously true for `x`=`1`, and 
-   obviously wrong for `y`=`2`. With this goal in mind, we reach the following 
-   definition:
+   Hopefully this is intuitive. If `x` and `y` are equal, then they should be 
+   interchangeable. Informally, what is true of `x` should be true of `y` by substitution.
+
+  To prove then that `1` and `2` are unequal, we start with their assumed equality, 
+  then use `eq_ind` to construct a contradiction.
+  We choose the dependent proposition `P` supplied to `eq_ind` such that `P` obviously 
+  holds for `1`, and obviously doesn't for `2`.
+  With this goal in mind, we reach the following definition:
  
 {% highlight Coq %}
 Definition P := fun x =>
@@ -106,7 +102,7 @@ Compute (P 2).
 {% endhighlight %}
 
  
- Now we just give P to `eq_ind`, and fill in the other necessary arguments: 
+ Now we just give `P` to `eq_ind`, and fill in the other necessary arguments: 
 
 {% highlight Coq %}
 Check ((fun H: 1 = 2 => eq_ind 1 P I 2 H) : 1 <> 2).
@@ -114,14 +110,15 @@ Check ((fun H: 1 = 2 => eq_ind 1 P I 2 H) : 1 <> 2).
 
 
  This method we used here can be generalized to any structural inequality. To prove 
-   a <> b, we would want to construct a similar P with a revised match statement
+  `a <> b`, we would want to construct a similar `P` with a revised match statement
 
-   ```
-   match x with 
-   | a => True 
-   | _ => False
-   end
-   ```
+{% highlight Coq %}
+Definition P := fun x =>
+  match x with 
+  | a => True 
+  | _ => False
+  end.
+{% endhighlight %}
    
    So long as `a` and `b` are structurally unequal, the match statment will take one to 
    `True` and the other to `False`, setting the stage for our contradiction.
@@ -131,12 +128,12 @@ Check ((fun H: 1 = 2 => eq_ind 1 P I 2 H) : 1 <> 2).
    Once it has proved `False`, it can prove any goal.
  
 
-# Detour 
+# Bonus: Proof (Ir)relevance
  
  That's it for the main topic, but for the interested reader, now is also a good time 
    for a digression on Props and (in)equality.
 
-   While not provable in Coq, many users decided to introduce the concept of proof 
+   While not directly derivable in Coq, many users decided to introduce the concept of proof 
    irrelevance axiomatically:
  
 {% highlight Coq %}
@@ -144,14 +141,16 @@ Axiom proof_irrelevance: forall (P: Prop) (p1 p2: P), p1 = p2.
 {% endhighlight %}
 
 
- That is, we are now permitting two terms of sort Prop to be considered equal,
-   *even if they are not definitionally equal*.
+ <!-- That is, we are now permitting two terms of sort `Prop` to be considered equal,
+   *even if they are not definitionally equal*. -->
+
+  That is, we permit *any* two proofs terms of some proposition to be considered equal.
 
    Anytime you add an axiom to Coq, you must ensure that it is consistent. That is,
    that the axiom does not admit a proof of `False`.
 
    Proof irrelevance would be inconsistent if we could come up with some `p1` and `p2` 
-   of a shared Prop type which we could prove unequal, in direct contradiction with 
+   of a shared proposition which we could prove unequal, in direct contradiction with 
    the axiom.
 
    Thinking about what we just learned about inequalities, shouldn't such a proof be 
@@ -200,33 +199,24 @@ Fail Definition P' := fun x =>
 
  Failure again! At least this error message is more informative...
 
-   Coq tells us that our elimination of `x` (our match term) is invalid, because a Prop cannot
-   be eliminated to produce a term of sort Type (the same applies producing a term of sort 
-   Set). There are many reasons for this restriction, and in fact we should be thankful for 
+   Coq tells us that our elimination of `x` (our match term) is invalid, because a proof term
+   (a term whose type has type `Prop`) cannot be eliminated to produce a term whose type 
+   has type `Type`.
+   
+   What we have encountered is Coq's elimination restriction on proof terms. Proof terms are only
+   allowed to be eliminated to construct further proof terms. Therefore, we prevent information 
+   flow out of the `Prop` universe.
+
+   There are many reasons for this restriction, and in fact we should be thankful for 
    it. Perhaps the most obvious is in terms of code extraction. Because the computational 
-   components of a Coq spec (the Set and Type sorted terms) are independent of Prop values,
-   we can completely erase Props from the extraction!
+   components of a Coq spec (the `Set` and `Type` sorted terms) are independent of proof terms,
+   we can completely erase them during extraction!
 
-   The only information from Props that are allowed into Types and Sets exist at the 
+   The only information from `Prop`s that are allowed into `Type`s and `Set`s exist at the 
    type-level. So once we confirm that our spec type-checks within Coq, we are safe to erase 
-   all Props in the extracted code.
+   all proof terms in the extracted code.
 
-   It also means that we can't prove an inequality of Props, even when it seems obvious by 
+   It also means that we can't prove an inequality on proof terms, even when it seems obvious by 
    structural differences.
 
-   In this case, our match term in `P'` eliminates a term of sort Prop and produces a Prop.
-   At first glance, this might appear consistent with the rules of Prop elimination. The
-   problem is in the type of `P'`, `foo -> Prop`.
- 
-{% highlight Coq %}
-Check (foo -> Prop).
-   
-(* foo -> Prop : Type *)
-{% endhighlight %}
-
-
- Thus, if `P'` were typable, it would be a Type, constructed by inspection of 
-   a Prop `foo`. This is the point of the proof that Coq admirably rejects.
- 
-
- Up next, rewriting. 
+Next up in our series, we deal with [rewriting](/coq equality/2021/08/02/rew).
