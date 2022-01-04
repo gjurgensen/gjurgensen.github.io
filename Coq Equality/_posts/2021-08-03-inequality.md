@@ -219,4 +219,4 @@ Fail Definition P' := fun x =>
    It also means that we can't prove an inequality on proof terms, even when it seems obvious by 
    structural differences.
 
-Next up in our series, we deal with [rewriting](/coq equality/2021/08/02/rew).
+Next up in our series, we deal with [rewriting](/coq equality/2021/08/03/rew).
