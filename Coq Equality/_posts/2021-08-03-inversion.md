@@ -13,7 +13,7 @@ Tag: Coq
 
  When I first learned about the `inversion` tactic, I was constantly getting it 
    mixed up with `destruct`. When plugging in a USB drive, one always finds themselves 
-   trying the wrong side first. Similarily, I would always try the wrong tactic first
+   trying the wrong side first. Similarly, I would always try the wrong tactic first
    before realizing my mistake.
 
    In fact, the two are quite similar in their goal. `destruct` is the classic means 
