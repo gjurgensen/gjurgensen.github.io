@@ -359,7 +359,7 @@ $$
 Note that we have not given the type $\bot$ *any* inhabitants (it has no introduction rule). Indeed, by the Curry-Howard correspondence, $\bot$ corresponds to the empty type, i.e. the type with no terms.
 This might seem a strange definition, in that its type interpretation does not seem immediately useful, and you likely have never come across such a type in the wild.
 While the uninhabited type is not particularly common in programs, it does appear from time to time. For instance, see the [Void](https://hackage.haskell.org/package/void-0.7.1/docs/Data-Void.html) type in Haskell.
-It's usefulness may be more clear if you consider that the empty type acts as a sort of unit (up to isomorphism) on the sum type.
+It's usefulness may be more clear if you consider that the empty type acts as an identity element (up to isomorphism) on the sum type.
 
 Next up, how can we define the negation operator we referenced earlier? This one is trickier.
 Our motivating intuition is that $A$ and $\neg A$ should be mutually exclusive.
