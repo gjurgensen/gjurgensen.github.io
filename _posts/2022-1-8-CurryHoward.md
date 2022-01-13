@@ -44,7 +44,7 @@ Let's introduce some basic types and related concepts, which should be more or l
 
 First, we assume some collection of type primitives. For example, a string type, a natural number type, etc.
 
-Type judgments come in the form $\Gamma \vdash x : A$, which is read "$x$ has type $A$ in context $\Gamma$". If the context is empty, we may omit it, writing instead $\vdash x : A$. For instance, we may right assert $\vdash 3 : \mathbb{N}$, where $\mathbb{N}$ is the type of the natural numbers.
+Type judgments come in the form $\Gamma \vdash x : A$, which is read "$x$ has type $A$ under context $\Gamma$". If the context is empty, we may omit it, writing instead $\vdash x : A$. For instance, we may rightly assert $\vdash 3 : \mathbb{N}$, where $\mathbb{N}$ is the type of the natural numbers.
 
 Contexts are necessary to type open terms. For instance, what would the type of $x + x$ be?
 This expression is "open", since it contains an unbound variable, $x$. We can only type the expression if the type of $x$ is known. For instance, we may say $x : \mathbb{N} \vdash x + x : \mathbb{N}$.
@@ -69,7 +69,7 @@ $$
 \cfrac{\Gamma \vdash x : A \times B}{\Gamma \vdash \pi_2\ x : B}[\times\text{-E}_2]
 $$
 
-Recall that the judgments on the top side of an inference rule specifies a precondition, and the judgment on bottom specifies a conclusion. The name of each rule is listed on the right-hand side, in square brackets. Rules which end with "I" describe *introduction* rules, i.e. rules which describes how a construct is built. The rules ending in "E" are *elimination* rules, and describe how a construct is taken apart.
+Recall that the judgments on the top side of an inference rule specifies the preconditions, and the judgment on bottom specifies the conclusion. The name of each rule is listed on the right-hand side, in square brackets. Rules which end with "I" describe *introduction* rules, i.e. rules which describes how a construct is built. The rules ending in "E" are *elimination* rules, and describe how a construct is taken apart.
 
 In the two elimination rules, $\pi_1$ is the first projection, and $\pi_2$ is the second. In most programming languages, these would be called `fst` and `snd`.
 The computational behavior of the projections may well be guessed, but for total clarity we provide the formal rules here. We use $x \leadsto y$ to mean "$x$ computes to $y$".
@@ -110,7 +110,7 @@ $$
 
 <!-- A sum type, written `A + B` (`either A B` in Haskell, `(A, B) result` in some flavors of SML) represents values of either `A` or `B`. However, the underlying elements are not admitted directly. Instead, they must be "tagged" with whether they appear in the left or right position. If `a: A`, then we permit `inl a : A + B`. Similarly, if `b: B`, we allow `inr b : A + B`. -->
 
-Note the type $A \rightarrow C$ and $B \rightarrow C$ in the elimination rule. These are function types, which will be discussed shortly.
+Note the types $A \rightarrow C$ and $B \rightarrow C$ in the elimination rule. These are function types, which will be discussed shortly.
 
 The computations rules are again straightforward, but we include them for reference.
 
@@ -128,7 +128,7 @@ $$
 
 <!-- Finally, the function type is written `A -> B`, describing a function taking an argument of type `A`, and evaluating to a term of type `B`. We use the [λ-calculus](https://en.wikipedia.org/wiki/Lambda_calculus) notation for functions and application. For instance, the term `(λx. x + 1) 4` would simplify to `5`. -->
 
-Finally, we have the function type. We use the common syntax for functions borrowed from the λ-calculus. In this syntax, a function has the shape $\lambda x. y$. Here, $x$ is the name of the function argument, and $y$ is the body of the function, where $x$ may occur as a free (i.e. unbound) variable. In ordinary mathematics, we might write $f(x) = y$. This is equivalent to our earlier example, except it is a declaration/binding instead of an anonymous expression.
+Finally, we have the function type. We use the common syntax for functions borrowed from the λ-calculus. In this syntax, a function has the shape $\lambda x. y$. Here, $x$ is the name of the function argument, and $y$ is the body of the function, where $x$ may occur as a free (i.e. unbound) variable. In ordinary mathematics, we might write $f(x) = y$. This is equivalent to the lambda function, except it is a declaration/binding instead of an anonymous expression.
 
 A function type is written $A \rightarrow B$, meaning it takes a value of type $A$, and evaluates to an expression of type $B$. Function application is written without any parentheses, but with a space. I.e., $f\ x$ is the application of function $f$ to expression $x$.
 
@@ -172,6 +172,8 @@ $$
 (\lambda x\ y. x + y) : \mathbb{N} \rightarrow \mathbb{N} \rightarrow \mathbb{N}
 $$
 
+Similarly, we associate function application leftward. So the expression $(\lambda x\ y. x + y)\ 1\ 2$ is equivalent to the more explicit $((\lambda x\ y. x + y)\ 1)\ 2$.
+
 We conclude with the computational behavior of functions:
 
 $$
@@ -189,10 +191,10 @@ Note that our function type only describes one argument. This is in fact suffici
  -->
 ## Propositions
 
-Let's take a detour to review logical propositions. Perhaps you learned about these in your undergraduate Computer Science studies. If not, no worries, I'll be defining everything here, just as I did with our types.
+Let's pivot to review logical propositions. Perhaps you learned about these in your undergraduate Computer Science studies. If not, no worries, I'll be defining everything here, just as I did with our types.
 
 Propositional judgments will take the form $\Gamma \vdash A$. Here, $A$ is a proposition, and $\Gamma$ is a list of assumptions. When nothing is assumed we write $\vdash A$.
-Just as we did for types, we will assume there to be primitive/atomic propositions. We then define some important propositional connectives. Recall that a proposition is conceptually just a statement which is true or false.
+Just as we did for types, we will assume there to be some set of primitive/atomic propositions. We then define some important propositional connectives. Recall that a proposition is conceptually just a statement which is true or false.
 
 The first connective is logical conjunction. Let $A$ and $B$ be propositions. Then the conjunction $A \wedge B$ is also a proposition.
 This may be read "and", as in "both $A$ *and* $B$ are true". You may have seen this operator with different notation, such as $A * B$ in digital circuit design, or `A && B` in a variety of programming languages. 
@@ -219,7 +221,7 @@ $$
 
 There are a couple important takeaways from these rules. First, note that $\Rightarrow$, used in the elimination rule, represents logical implication, which we will get to shortly. Second, note that this definition of disjunction is not as powerful as it could be. In order to prove $A \vee B$, we must be able to prove $A$ or $B$. What if we wanted to prove $X \vee \neg X$ for some unknown $X$, where $\neg X$ is the logical negation (complement) of $X$? This is valid in classical logic, since the two arms of the disjunction are mutually exclusive and therefore one of them must be true. Yet, we have no way to prove it here, since we don't have any idea *which* arm of the disjunction holds. This principle, known as the [law of the excluded middle](https://en.wikipedia.org/wiki/Law_of_excluded_middle), is what separates classical logics from intuitionistic/constructive logics. Since our logic does not support the principle, it is intuitionistic.
 
-Finally, as promised, we have logical implication, written $A \Rightarrow B$. This is interpreted "$A$ implies $B$", or "if $A$, then $B$". Note that if $A$ does not hold, then the implication says noting of $B$. Therefore, when $A$ is false, $A \Rightarrow B$ is trivially true. Alternative notation includes $A \supset B$.
+Finally, as promised, we have logical implication, written $A \Rightarrow B$. This is interpreted "$A$ implies $B$", or "if $A$, then $B$". Note that if $A$ does not hold, then the implication says nothing of $B$. Therefore, when $A$ is false, $A \Rightarrow B$ is trivially true. Alternative notation includes $A \supset B$.
 
 $$
 \cfrac{\Gamma, A \vdash B}{\Gamma \vdash A \Rightarrow B}[\Rightarrow\text{-I}]
@@ -442,7 +444,10 @@ I won't include the formal rules here, nor the rules of their type equivalents. 
 Let's instead consider the type interpretations informally. 
 If we were to introduce these quantifiers to our theory, what would their type interpretations be? Incredibly, they have extremely natural interpretations. Let's begin with the universal quantifier. In type theory, rather than writing $\forall$, we write $\Pi$ (uppercase pi). The $\Pi$-type generalizes function types. Let $P : A \rightarrow Type$, where $Type$ is the type of simple types[^1]. Then the type $\Pi a: A. P\ a$ represents a function which takes an argument $a: A$, and evaluates to a term of type $P\ a$. Note that the specific term which is applied to the function is visible to the return type. One could say that the return type $P\ a$ is *dependent* on the input value $a: A$. The ability of a type to depend on a value is what gives dependent type theory its name.
 
-[^1]: $Type$ cannot be the type of *all* types, as this walks into a paradox. In particular, it must not be the case that $Type : Type$. This circularity gives way to Russell's paradox. This is why I say $Type$ is only the type of "simple" types. 
+[^1]:
+    $Type$ cannot be the type of *all* types, as this walks into a paradox. In particular, it must not be the case that $Type : Type$. This circularity gives way to Russell's paradox. This is why I say $Type$ is only the type of "simple" types. 
+
+    Here, we don't assign any judgment to $Type$. It has no type (nor similar designations like "kind" or "sort"). Some type theories avoid this problem by introducing a countable infinitude of type "universes", each associated with a natural number. Then universe $i$ has type universe $i + 1$. Each such universe can therefore have a type while avoiding circularity.
 
 As previously mentioned, the $\Pi$-type generalizes function types. This means that the non-dependent function type $A \rightarrow B$ may be view simply as shorthand for $\Pi x: A. B$, where $x$ does not occur in $B$.
 
