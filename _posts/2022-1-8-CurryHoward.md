@@ -355,7 +355,7 @@ While $\top$ had only an introduction rule, $\bot$ has only an elimination rule.
 To translate the inference rule into a typing rule, we must name the eliminator:
 
 $$
-\cfrac{\Gamma \vdash x : \bot}{\Gamma \vdash exfalso\ \ x : A}[\bot\text{-E}]
+\cfrac{\Gamma \vdash x : \bot}{\Gamma \vdash exfalso\ A\ x : A}[\bot\text{-E}]
 $$
 
 Note that we have not given the type $\bot$ *any* inhabitants (it has no introduction rule). Indeed, by the Curry-Howard correspondence, $\bot$ corresponds to the empty type, i.e. the type with no terms.
@@ -388,7 +388,7 @@ Everything else you need has already been defined.
 For the less enthusiastic reader (or to check your work), here is the proof term:
 
 $$
-(\lambda f.\ case\ (\lambda a. a)\ (\lambda n.\ exfalso\ \ (f\ n))\ (lem\ A)) : (\neg \neg A) \rightarrow A
+(\lambda f.\ case\ (\lambda a. a)\ (\lambda n.\ exfalso\ A\ (f\ n))\ (lem\ A)) : (\neg \neg A) \rightarrow A
 $$
 
 We conduct the proof by case analysis on $lem\ A : A + \neg A$. If $A$ holds, we have reached our conclusion, and simply return the proof term.
