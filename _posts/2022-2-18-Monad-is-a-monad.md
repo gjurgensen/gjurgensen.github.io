@@ -206,7 +206,7 @@ Many of the functions I've discussed in this post have optional alternative name
 
 `fmap` has an infix alias, `<$>`. So `fmap f x` = `f <$> x`. This infix operator is more common in practice.
 
-Monads define there own function called `return` which is often used instead of `pure`.
+Monads define their own function called `return` which is often used instead of `pure`.
 <!-- Instead of using `pure`, monads actually use a function called `return`. -->
 This is purely[^pun] a historical artifact, and it is expected that `return` = `pure`.
 
