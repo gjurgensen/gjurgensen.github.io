@@ -103,8 +103,7 @@ Next is the sum type. Conceptually, a sum $A + B$ describes values corresponding
 $$
 \cfrac{\Gamma \vdash a: A}{\Gamma \vdash inl\ a : A + B}[+\text{-I}_1]
 \qquad
-\cfrac{\Gamma \vdash b: B}{\Gamma \vdash inr\ b : A + B}[+\text{-I}_2]
-\qquad
+\cfrac{\Gamma \vdash b: B}{\Gamma \vdash inr\ b : A + B}[+\text{-I}_2]\\[20pt]
 \cfrac{\Gamma \vdash f : A \rightarrow C \qquad \Gamma \vdash g : B \rightarrow C \qquad \Gamma \vdash x : A + B}{\Gamma \vdash case\ f\ g\ x : C}[+\text{-E}]
 $$
 
@@ -434,17 +433,20 @@ First is the *universal* quantifier, written $\forall$ and pronounced "for all".
 For instance, the proposition $\forall x: \mathbb{N}. even\ (2 * x)$ would be read "for any $x$, $2*x$ is even".
 
 The second quantifier is known as the *existential* quantifier, represented by $\exists$, and pronounced "exists". For instance, we may define the $even$ predicate from the previous example as
-$\lambda y: \mathbb{N}. \exists x: \mathbb{N}. 2 * x = y$.
+$\lambda y: \mathbb{N}. \exists x: \mathbb{N}. 2 * x = y$[^1].
 We would read $even\ y$ as "there exists some $x$ such that $2 * x$ is $y$".
 <!-- The proposition `∃x, x*x = 9` would be read "there exists some `x` such that `x*x` is 9".
  -->
 
+[^1]: 
+    We have of course elided over a formal definition of equality. Equality is a regular proposition, frequently referred to as the [identity type](https://en.wikipedia.org/wiki/Type_theory#Identity_Type) in type theory literature. The details are unimportant here. Suffice it to say that equality may follow immediately if terms converge under computation (e.g. $2 + 1$ and $3$), or may be proven less straightforwardly, say by induction (e.g. $m + n$ and $n + m$).
+
 I won't include the formal rules here, nor the rules of their type equivalents. The theory is quickly complicated by the intermixing of terms and types. In particular, we would now need to differentiate different kinds of types. A notion of convertibility would also be needed. For those interested in such a formalism, I'd suggest looking at section 1.2, "Dependent Types", in [Advanced Topics in Types and Programming Languages](https://www.cis.upenn.edu/~bcpierce/attapl/).
 
 Let's instead consider the type interpretations informally. 
-If we were to introduce these quantifiers to our theory, what would their type interpretations be? Incredibly, they have extremely natural interpretations. Let's begin with the universal quantifier. In type theory, rather than writing $\forall$, we write $\Pi$ (uppercase pi). The $\Pi$-type generalizes function types. Let $P : A \rightarrow Type$, where $Type$ is the type of simple types[^1]. Then the type $\Pi a: A. P\ a$ represents a function which takes an argument $a: A$, and evaluates to a term of type $P\ a$. Note that the specific term which is applied to the function is visible to the return type. One could say that the return type $P\ a$ is *dependent* on the input value $a: A$. The ability of a type to depend on a value is what gives dependent type theory its name.
+If we were to introduce these quantifiers to our theory, what would their type interpretations be? Incredibly, they have extremely natural interpretations. Let's begin with the universal quantifier. In type theory, rather than writing $\forall$, we write $\Pi$ (uppercase pi). The $\Pi$-type generalizes function types. Let $P : A \rightarrow Type$, where $Type$ is the type of simple types[^2]. Then the type $\Pi a: A. P\ a$ represents a function which takes an argument $a: A$, and evaluates to a term of type $P\ a$. Note that the specific term which is applied to the function is visible to the return type. One could say that the return type $P\ a$ is *dependent* on the input value $a: A$. The ability of a type to depend on a value is what gives dependent type theory its name.
 
-[^1]:
+[^2]:
     $Type$ cannot be the type of *all* types, as this walks into a paradox. In particular, it must not be the case that $Type : Type$. This circularity gives way to Russell's paradox. This is why I say $Type$ is only the type of "simple" types. 
 
     Here, we don't assign any judgment to $Type$. It has no type (nor similar designations like "kind" or "sort"). Some type theories avoid this problem by introducing a countable infinitude of type "universes", each associated with a natural number. Then universe $i$ has type universe $i + 1$. Each such universe can therefore have a type while avoiding circularity.
