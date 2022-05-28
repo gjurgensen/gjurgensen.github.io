@@ -7,7 +7,7 @@ tag: Haskell
 
 > "... she would carve on the tree Rose is a Rose is a Rose is a Rose is a Rose until it went all the way around." - The World is Round, Gertrude Stein
 
-Many a blog and tutorial alike will tell you that a monad is something other than what it is. Perhaps it is a "box", or a "burrito". Sometimes it is a "computation" (aren't all Haskell terms computations?). Certainly there is some merit to this style of explanation-by-analogy. However, such presentations are necessarily limited to approximations of what a monad really is. Analogies may impart some initial intuition, but sooner than later end up holding our mental model back from reaching the full generality of what a monad really is. And it isn't as complicated as you might expect.
+Many a blog and tutorial alike will tell you that a monad is something other than what it is. Perhaps it is a "box", or a "burrito". Sometimes it is a "computation" (aren't all Haskell terms computations?). Certainly there is some merit to this style of explanation-by-analogy. However, such presentations are necessarily limited to approximations of what a monad really is. Analogies may impart some initial intuition, but sooner or later end up holding our mental model back from reaching the full generality of what a monad really is. And it isn't as complicated as you might expect.
 
 I'd like to explain what a monad really is[^non-categorical], as straightforward as possible, without the analogies. A monad is a monad (is a monad is a monad...).
 
@@ -15,8 +15,8 @@ I'd like to explain what a monad really is[^non-categorical], as straightforward
 
 # Type Families
 
-A monad is a special kind of type family, along with a couple of important functions.
-By a type family, I mean anything with kind `* -> *`. A simple function to and from types. For example, let `t :: * -> *` and `x :: *`. Then `t` is a type family and `x` is a type. `t x :: *` is a type, may be called an instance of the type family `t`. We may also say `x` is the parameterized type in `t x`.
+A monad is a special kind of type family, along with a couple of important functions. Let's clarify some terminology.
+By a type family, I mean anything with kind `* -> *`. A simple function to and from types. For example, let `t :: * -> *` and `x :: *`. Then `t` is a type family and `x` is a type. `t x :: *` is also a type, and an "instance" of the type family `t`. We may also say `x` is the parameterized type in `t x`.
 
 Some examples of type families include `[]`, `Maybe`, `Tree`, `Map k`, and `Either a` (where `k` and `a` are arbitrary types). Each of these families may generally be understood as describing some structured collection on their parameterized type. But we can also concoct some type families which do not admit a notion of structure. For instance, `((->) a)` describes the family of functions with domain `a`.
 
@@ -53,7 +53,11 @@ Any functor instance is expected to obey certain laws so that it aligns with our
 
 [^fmap-id]: The equivalent statement `fmap id` = `id` is simpler. However, it may be confusing in that the first instance of `id` takes the type `a -> a`, while the second takes the type `f a -> f a`, where `f` is the functor in question.
 
-These formal laws enforce the informal intuition that a functoral map should preserve the underlying "structure".
+In English, the first law says that mapping the identity function over an object should leave it unchanged. The second law says that sequential map operation may be combined in to a single map.
+
+If these laws seem confusing, try to consider concrete examples. Let's say we are mapping `(+ 1)` over a list, and then we map `(* 2)` over that. Intuitively, wouldn't this be equivalent to a single mapping of `\x -> (x + 1) * 2`, as enforced by the second law?
+
+Together, these formal laws enforce the informal intuition that a functoral map should preserve the underlying "structure" of the functoral object.
 
 Before moving on, I'd suggest spending some time with the idea of functors. Make sure that you are comfortable with them. All of the type families I mentioned earlier are functors; try to imagine how their respective `fmap` definitions would behave and why they would be useful.
 
@@ -88,6 +92,8 @@ $$ -->
 Formally, we expect the following law to hold:
 
 1. `fmap f . pure` = `pure . f`
+
+Again, when such laws are unclear, I encourage you to consider concrete examples. What does this mean for `[]`? How about for `Maybe`?
 
 # Monads
 
@@ -125,14 +131,14 @@ That's it! We've defined a monad! I bet that wasn't as complicated as you were e
 
 # Bind
 
-Given our definition of a monad, we may define an important infix operator, `>>=`, pronounced "bind":
+We've defined a monad, but we aren't done yet. Given our definition of a monad, we may define an important infix operator, `>>=`, pronounced "bind":
 
 {% highlight haskell %}
 (>>=) :: Monad m => m a -> (a -> m b) -> m b
 m >>= f = join (fmap f m)
 {% endhighlight %}
 
-We can see that `>>=` is like `fmap`, except the codomain of the function we are mapping is also monadic. Rather than accumulating nested monads, we `join` the result to return to original level of structure.
+We can see that `>>=` is like `fmap`, except the codomain of the function we are mapping is also monadic. Rather than accumulating nested monads, we `join` the result to return to our original level of structure.
 
 <!-- You can see that `>>=` is sort of like `fmap`, but the codomain of the function we are mapping is also monadic. Rather than  -->
 
@@ -167,7 +173,7 @@ The monad definition given in the earlier section is valid and straightforward.
 However it is not the definition we'll find in Haskell.
 Rather than defining `join` and then deriving `>>=`, Haskell has you define `>>=` and derives `join`[^join_better].
 
-[^join_better]: Presumably, Haskell's monads are defined in terms of `>>=` because this function is much more widely used than `join`. I retain that the definition in terms of `join` is still superior, because it is less of an obligation. `join` is weaker than `>>=`, and the definition of `>>=` will necessarily have overlap with that of the previously defined `fmap`.
+[^join_better]: Presumably, Haskell's monads are defined in terms of `>>=` because this function is much more widely used than `join`. I maintain that the definition in terms of `join` is still superior, because it is less of an obligation. `join` is weaker than `>>=`, and the definition of `>>=` will necessarily have overlap with that of the previously defined `fmap`.
 <!-- The reason I provided an initial definition in terms of `join` is because I think this definition is better. The reason I think it is better is  -->
 <!-- The definition of `>>=` is "bigger" than `join` (as witnessed by `join` being a special case of `>>=`), and `>>=` necessarily overlaps with `fmap`. -->
 
@@ -198,7 +204,7 @@ Finally, out of convenience, we introduce the degenerative bind:
 m >> n = m >> const n
 {% endhighlight %}
 
-It might seem that `>>` throws away the left value, but this is not so. The structure will inform the overall result. For instance, `[1..4] >> [3]` evaluates to `[3, 3, 3, 3]` (each element of the left list is replaced with `[3]`, and then the sublists are concatenated).
+Looking at the type, it might seem that `>>` ignores the left value, but this is not so. The structure will inform the overall result. For instance, `[1..4] >> [3]` evaluates to `[3, 3, 3, 3]` (each element of the left list is replaced with `[3]`, and then the sublists are concatenated).
 
 # Notation
 
@@ -219,7 +225,7 @@ Finally, the (in?)famous `do` notation is used to greatly ease the strain of usi
 
 We have seen that a monad is just a special kind of functor, and that `>>=` allows us to chain together monadic actions without accumulating multiple layers of nested monadic structure.
 The last piece of the puzzle is an appreciation of monads as a consistently useful abstraction. I think this is where many struggle. The definitions themselves are not terribly complex. But why are monadic interfaces so convenient for dealing with a variety of issues, from IO to error handling? 
-There is not a simple answer to this, and I think one may only come to appreciate their usefulness after significant real experience using them.
+There is not a simple answer to this, and I think one may only come to appreciate the usefulness of monads through real experience using them.
 
 # Footnotes
 
