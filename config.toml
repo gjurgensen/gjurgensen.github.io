@@ -1,0 +1,6 @@
+baseURL = 'https://grant.jurgensen.dev'
+languageCode = 'en-us'
+title = 'Grant Jurgensen'
+theme = 'gjurgensen'
+
+markup.highlight.noClasses = false

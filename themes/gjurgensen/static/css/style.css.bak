@@ -1,0 +1,37 @@
+:root {
+  /* --light: #faf5e0; */
+  /* --light1: #cfcbba; */
+  /* --dark: #252522; */
+  /* --dark1: #343430; */
+  /* --dark2: #504e48; */
+  /* --dark3: #7a786e; */
+  /* --dark4: #a5a294; */
+  --light: #fffdf5;
+  --dark: #2a2a29;
+  --dark0: #555452;
+  --dark1: #807f7b;
+  --dark2: #aaa9a3;
+  --dark3: #d4d3cc;
+
+  --accent1: #ffc09f; /* "peach" */
+  --accent2: #ffee93; /* "flex" */
+  --accent3: #fcf5c7; /* "lemon chiffon" */
+  --accent4: #a0ced9; /* "light blue" */
+  --accent5: #adf7b6; /* "celadon" */
+}
+
+body {
+  /* background-color: var(--light); */
+  background-color: #FFF;
+  color: var(--dark);
+
+  font-family: "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+#content {
+  display: flex;
+}
+
+a {
+  color: var(--accent1);
+}

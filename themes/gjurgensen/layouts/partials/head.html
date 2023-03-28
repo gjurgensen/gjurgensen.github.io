@@ -1,0 +1,41 @@
+<head>
+  <link rel="stylesheet" href="/css/style.css" type="text/css"/>
+  <link rel="stylesheet" href="/css/syntax.css" type="text/css"/>
+  <link rel="icon" type="image/x-icon" href="/icon/favicon.ico">
+
+  <script type="text/x-mathjax-config">
+    var font = "Neo-Euler";
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    <!-- displayMath: [['\\[','\\]']], -->
+    processEscapes: true,
+  },
+  "SVG":{
+  },
+  "HTML-CSS": {
+    scale: 90,
+    linebreaks: {automatic: true, width: "container"},
+    mtextFontInherit: true
+  }
+});
+
+//window.addEventListener('resize', MJrerender);
+let t = -1;
+let delay = 250;
+function MJrerender() {
+  if (t >= 0) {
+    // If we are still waiting, then the user is still resizing =>
+    // postpone the action further!
+    window.clearTimeout(t);
+  }
+  t = window.setTimeout(function() {
+    MathJax.Hub.Queue(["Rerender",MathJax.Hub]);
+    t = -1; // Reset the handle
+  }, delay);
+};
+
+  </script> <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  <title>{{ .Title }}</title>
+</head>
