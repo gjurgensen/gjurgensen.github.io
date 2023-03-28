@@ -47,7 +47,7 @@ body {
 
 .navbar a {
   color: var(--accent-red);
-  font-size: 22px;
+  font-size: 20px;
   text-decoration: none;
 }
 
@@ -94,6 +94,8 @@ body {
 #content {
   max-width: 60em;
   /* width: 60em; */
+
+  min-height: 100%;
 }
 
 h1 {
@@ -147,4 +149,58 @@ code {
   /* This should only apply to inline code; it is overwritten in `.chroma code`*/
   padding-left: 4px;
   padding-right: 4px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+footer {
+  position: absolute;
+  /* TODO: hacky */
+  bottom: -64px;
+
+  display: flex;
+
+  background-color: var(--light0);
+  padding: 0.5em;
+  margin-top: 2em;
+
+  border: 1px solid var(--light1);
+
+  justify-content: center;
+  width: 100%;
+}
+
+#footer-main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 60em;
+}
+
+#footer-left th {
+  text-align: left;
+  /* Useful for visualizing spacing */
+  /* border: 1px dashed red; */
+
+  padding-right: 32px;
+  font-weight: bold;
+
+  color: var(--dark2);
+  font-size: 12px;
+}
+
+/* TODO: "Website hosted on" message overhangs slightly? */
+#footer-right th {
+  text-align: right;
+  /* Useful for visualizing spacing */
+  /* border: 1px dashed red; */
+
+  padding-left: 32px;
+  font-weight: normal;
+
+  color: var(--dark2);
+  font-size: 12px;
 }

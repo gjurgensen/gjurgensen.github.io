@@ -11,13 +11,14 @@
   border-left: 2.5px solid var(--dark2);
 
   font-family: "Courier New",monospace;
-  /* font-size: 18px; */
   line-height: 1.25;
 }
 
 .chroma code {
   padding-left: 0;
   padding-right: 0;
+  /* font-size: 18px; */
+  /* font-size: 16px; */
 }
 
 /* Other */ .chroma .x {  }
