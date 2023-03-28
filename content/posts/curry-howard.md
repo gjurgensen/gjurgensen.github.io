@@ -1,6 +1,6 @@
 ---
 title: "The Curry-Howard Correspondence"
-date: 2022-1-8 00:00:01
+date: 2022-01-08 00:00:01
 draft: false
 ---
 

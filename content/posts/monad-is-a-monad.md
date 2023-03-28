@@ -5,7 +5,7 @@ draft: false
 tag: Haskell
 ---
 
-> "... she would carve on the tree Rose is a Rose is a Rose is a Rose is a Rose until it went all the way around." - The World is Round, Gertrude Stein
+> "... she would carve on the tree Rose is a Rose is a Rose is a Rose is a Rose until it went all the way around." – The World is Round, Gertrude Stein
 
 Many a blog and tutorial alike will tell you that a monad is something other than what it is. Perhaps it is a "box", or a "burrito". Sometimes it is a "computation" (aren't all Haskell terms computations?). Certainly there is some merit to this style of explanation-by-analogy. However, such presentations are necessarily limited to approximations of what a monad really is. Analogies may impart some initial intuition, but sooner or later end up holding our mental model back from reaching the full generality of what a monad really is. And it isn't as complicated as you might expect.
 

@@ -8,14 +8,16 @@
   padding-left: 12px;
   padding-right: 8px;
 
-  border-left-width: 2.5px;
-  border-left-style: solid;
-  border-left-color: var(--accent-red);
+  border-left: 2.5px solid var(--dark2);
 
   font-family: "Courier New",monospace;
-  /* font: 24px; */
-  font: 28px;
+  /* font-size: 18px; */
   line-height: 1.25;
+}
+
+.chroma code {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* Other */ .chroma .x {  }

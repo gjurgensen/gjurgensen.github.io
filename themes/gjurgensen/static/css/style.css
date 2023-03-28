@@ -9,9 +9,6 @@
   --dark1: #808079;
   --dark2: #aaaaa1;
 
-  /* --accent-red: #c84c1b; */
-  /* --accent-red: #e75319; */
-  /* --accent-red: #e71943; */
   --accent-red: #d13353;
   --accent-blue: #1a70c7;
   --accent-yellow: #d7b700;
@@ -19,23 +16,8 @@
   --accent-brown: #826c48;
   --accent-purple: #6947dc;
   --accent-cyan: #39a98a;
-}
-
-img {
-  /* display: block; */
-  margin-left: auto;
-  margin-right: auto;
-
-  width: 80%;
-}
-
-/* TODO: Factor out index-specific css? */
-img[alt=Headshot] {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-
-  width: 35em;
+  /* --accent-cyan: #1abfc7; */
+  /* --accent-cyan: #43a8a6; */
 }
 
 body {
@@ -114,6 +96,41 @@ body {
   /* width: 60em; */
 }
 
+h1 {
+  font-size: 28px;
+  margin-bottom: 0.25em;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 100%;
+}
+
+time {
+  color: var(--dark2);
+  font-size: 14px;
+}
+
+/* TODO: Factor out index-specific css? */
+img[alt=Headshot] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 67%;
+}
+
 a {
   color: var(--accent-blue);
   text-decoration: underline;
@@ -126,6 +143,8 @@ a:visited {
 code {
   color: var(--accent-red);
   font-family: "Courier New",monospace;
+
+  /* This should only apply to inline code; it is overwritten in `.chroma code`*/
   padding-left: 4px;
   padding-right: 4px;
 }
