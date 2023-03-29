@@ -1,15 +1,14 @@
 {{ define "main" }}
-<div class="container">
-  <div class="section">
-    <div class="content">
-      <h1 class="title">{{ .Title }}</h1>
-      {{ .Content }}
-      {{ range .Pages }}
-      <ul>
-        <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-      </ul>
-      {{ end }}
-    </div>
-  </div>
+<h1 class="title">{{ .Title }}</h1>
+{{ .Content }}
+{{ range .Pages }}
+<div class="pages-entry">
+  <a href="{{ .Permalink }}"><h3>{{ .Title }}</h3></a>
+  {{ with .PublishDate }}
+  <time>
+    {{ .Format "January 2, 2006" }}
+  </time>
+  {{ end }}
 </div>
+{{ end }}
 {{ end }}
