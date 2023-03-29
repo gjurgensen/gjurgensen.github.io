@@ -21,6 +21,8 @@
 
   --accent-blue-light: #5399e0;
   --accent-purple-light: #8a6bef;
+
+  --site-width: 50em;
 }
 
 body {
@@ -66,7 +68,8 @@ body {
   flex-direction: row;
   justify-content: space-between;
 
-  width: 60em;
+  /* width: 60em; */
+  width: var(--site-width);
   margin: 0 auto;
 
   /* Useful for visualizing spacing */
@@ -102,13 +105,20 @@ body {
 }
 
 #content {
-  max-width: 60em;
   /* width: 60em; */
+  width: var(--site-width);
   margin-left: 16px;
   margin-right: 16px;
 
   /* This is just to add space before the footer */
   margin-bottom: 6em;
+}
+
+@media (max-width: 60em) {
+  #content {
+    /* max-width: 100%; */
+    max-width: var(--site-width);
+  }
 }
 
 .pages-entry {
@@ -205,7 +215,8 @@ footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 60em;
+  /* width: 60em; */
+  width: var(--site-width);
 
   /* Useful for visualizing spacing */
   /* border: 1px dashed blue; */
