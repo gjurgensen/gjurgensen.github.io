@@ -22,7 +22,14 @@
   --accent-blue-light: #5399e0;
   --accent-purple-light: #8a6bef;
 
-  --site-width: 50em;
+  --site-width: 50rem;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+
+  font-size: 16px;
 }
 
 body {
@@ -42,7 +49,7 @@ body {
   display: flex;
 
   background-color: var(--light0);
-  padding: 0.5em;
+  padding: 0.5rem;
 
   border: 1px solid var(--light1);
 
@@ -68,7 +75,6 @@ body {
   flex-direction: row;
   justify-content: space-between;
 
-  /* width: 60em; */
   width: var(--site-width);
   margin: 0 auto;
 
@@ -105,39 +111,43 @@ body {
 }
 
 #content {
-  /* width: 60em; */
   width: var(--site-width);
-  margin-left: 16px;
-  margin-right: 16px;
+  margin-left: 1rem;
+  margin-right: 1rem;
 
   /* This is just to add space before the footer */
-  margin-bottom: 6em;
+  margin-bottom: 6rem;
 }
 
-@media (max-width: 60em) {
+/* TODO: can hardcoding this be avoided (can't use var) */
+@media (max-width: 52rem) {
+  #content-container {
+    /* width: calc(100% - 4rem); */
+    width: 100%;
+  }
+
   #content {
-    /* max-width: 100%; */
-    max-width: var(--site-width);
+    width: calc(100% - 2rem);
   }
 }
 
 .pages-entry {
-  margin-bottom: 2em;
+  margin-bottom: 2rem;
 }
 
 h1 {
   font-size: 28px;
-  margin-bottom: 0.25em;
+  margin-bottom: 0.25rem;
 }
 
 h2 {
   font-size: 24px;
-  margin-bottom: 0.25em;
+  margin-bottom: 0.25rem;
 }
 
 h3 {
   font-size: 20px;
-  margin-bottom: 0.25em;
+  margin-bottom: 0.25rem;
 }
 
 img {
@@ -184,24 +194,18 @@ hr {
   color: var(--light2);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-  /* min-width: 100%; */
-}
-
 footer {
   position: absolute;
   bottom: 0px;
-  margin-top: -64em;
+  margin-top: -64rem;
   left: 0;
   right: 0;
 
   display: flex;
 
   background-color: var(--light0);
-  padding: 0.5em;
-  margin-top: 2em;
+  padding: 0.5rem;
+  margin-top: 2rem;
 
   border-top: 1px solid var(--light1);
 
@@ -215,7 +219,6 @@ footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* width: 60em; */
   width: var(--site-width);
 
   /* Useful for visualizing spacing */
