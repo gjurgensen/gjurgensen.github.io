@@ -1,6 +1,7 @@
 ---
 title: "Coq Equality I"
 date: 2021-08-03 00:00:01
+math: true
 draft: false
 ---
 
