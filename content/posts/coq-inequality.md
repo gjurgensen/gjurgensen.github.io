@@ -126,7 +126,7 @@ Definition P := fun x =>
    Once it has proved `False`, it can prove any goal.
 
 
-# Bonus: Proof (Ir)relevance
+## Bonus: Proof (Ir)relevance
 
  That's it for the main topic, but for the interested reader, now is also a good time
    for a digression on Props and (in)equality.

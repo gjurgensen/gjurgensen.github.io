@@ -13,14 +13,14 @@ I'd like to explain what a monad really is[^non-categorical], as straightforward
 
 [^non-categorical]: When I talk about a monad in this post, I mean a monad in the Haskell and functional programming sense, as opposed to the category-theoretic definition. The same applies for our discussion of functors.
 
-# Type Families
+## Type Families
 
 A monad is a special kind of type family, along with a couple of important functions. Let's clarify some terminology.
 By a type family, I mean anything with kind `* -> *`. A simple function to and from types. For example, let `t :: * -> *` and `x :: *`. Then `t` is a type family and `x` is a type. `t x :: *` is also a type, and an "instance" of the type family `t`. We may also say `x` is the parameterized type in `t x`.
 
 Some examples of type families include `[]`, `Maybe`, `Tree`, `Map k`, and `Either a` (where `k` and `a` are arbitrary types). Each of these families may generally be understood as describing some structured collection on their parameterized type. But we can also concoct some type families which do not admit a notion of structure. For instance, `((->) a)` describes the family of functions with domain `a`.
 
-# Functors
+## Functors
 
 Rather than jumping right to monads, let's work our way there incrementally. A monad is an applicative functor is a functor.
 We'll start with the prototypical functor, the `[]` type family. There exists a ubiquitous function for lists, called `map`:
@@ -63,7 +63,7 @@ Before moving on, I'd suggest spending some time with the idea of functors. Make
 
 <!-- Finally some miscellaneous notes. You will often see the synonymous infix operator `<$>` instead of `fmap`. If you see `f <$> x`, this is equivalent to `fmap f x`. I should also note, the definition of functors given here is not the category-theoretic definition. It is the Haskell definition. It isn't necessary to understand the category theory to understand the role of functors in Haskell. Similarly, I will not provide a category-theoretic definition of monads; only a Haskell definition. -->
 
-# Applicative Functors
+## Applicative Functors
 
 I won't introduce applicative functors in full, only the part which is directly relevant to our eventual monad definition. An applicative functor is a functor, which adds two additional functions. The one we care about is called `pure`:
 
@@ -79,27 +79,15 @@ The idea behind `pure` is that it "lifts" a value into the most minimal structur
 2. `pure x :: Maybe a` = `Just x`
 3. `pure x :: Tree a` = `Node x []`
 
-<!-- $$
-\begin{align}
-\text{`pure x :: [a]`} &= `[x]` \\
-`pure x :: Maybe a` &= `Just x` \\
-`pure x :: Tree a` &= `Node x []`
-\end{align}
-$$ -->
-
-<!-- The formal laws can't be expressed without the other definition  -->
-
 Formally, we expect the following law to hold:
 
 1. `fmap f . pure` = `pure . f`
 
 Again, when such laws are unclear, I encourage you to consider concrete examples. What does this mean for `[]`? How about for `Maybe`?
 
-# Monads
+## Monads
 
 Finally, we come to the definition of a monad. A Monad is an applicative functor which adds a function called `join`.
-
-<!-- [^3]: I lied. -->
 
 ```Haskell
 class Applicative m => Monad m where
@@ -127,9 +115,8 @@ Formally, we expect the following behavior[^so-attrib]:
 4. `join . fmap (fmap f)` = `fmap f . join`
 
 That's it! We've defined a monad! I bet that wasn't as complicated as you were expecting.
-<!-- Although, there is certainly still more to be said. -->
 
-# Bind
+## Bind
 
 We've defined a monad, but we aren't done yet. Given our definition of a monad, we may define an important infix operator, `>>=`, pronounced "bind":
 
@@ -160,13 +147,7 @@ x/2
 ```
 -->
 
-
-
-<!-- Chaining monadic terms together. -->
-
-<!-- You may have seen the `>>=` function before (pronounced "bind").  -->
-
-# Monads (Again)
+## Monads (Again)
 
 <!-- The monad definition given in the earlier section is valid and direct, however it is not the definition we'll find in Haskell. -->
 The monad definition given in the earlier section is valid and straightforward.
@@ -206,7 +187,7 @@ m >> n = m >> const n
 
 Looking at the type, it might seem that `>>` ignores the left value, but this is not so. The structure will inform the overall result. For instance, `[1..4] >> [3]` evaluates to `[3, 3, 3, 3]` (each element of the left list is replaced with `[3]`, and then the sublists are concatenated).
 
-# Notation
+## Notation
 
 Many of the functions I've discussed in this post have optional alternative names, notations, and syntaxes.
 
@@ -221,11 +202,11 @@ This is purely[^pun] a historical artifact, and it is expected that `return` = `
 Finally, the (in?)famous `do` notation is used to greatly ease the strain of using `>>=`. The notation `do {a <- b ; ...}` is [syntactic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar) which corresponds to the expression `b >>= \a -> ...`. Similarly, `do {b ; ...}` desugars to `b >> ...`.
 
 
-# Conclusion
+## Conclusion
 
 We have seen that a monad is just a special kind of functor, and that `>>=` allows us to chain together monadic actions without accumulating multiple layers of nested monadic structure.
 The last piece of the puzzle is an appreciation of monads as a consistently useful abstraction. I think this is where many struggle. The definitions themselves are not terribly complex. But why are monadic interfaces so convenient for dealing with a variety of issues, from IO to error handling?
 There is not a simple answer to this, and I think one may only come to appreciate the usefulness of monads through real experience using them.
 
-# Footnotes
+## Footnotes
 

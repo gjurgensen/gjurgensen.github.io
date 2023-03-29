@@ -19,7 +19,7 @@ Documentation may be dry, but there's not better way to hone your understanding!
 
 Let's jump in.
 
-# 1. `find`
+## 1. `find`
 
 `find` is a higher-order tactic which takes a tactic as an argument. It then applies said tactic to the first hypothesis to make progress.
 
@@ -36,7 +36,7 @@ There are a myriad of reasons one might want to avoid explicitly using an identi
 
 Before moving on, let's note a technical detail in the above definition. The `tac` argument is given the nonterminal `tactic3`. Tactic expressions have 6 precedence levels, with 0 representing maximal precedence, and 5 representing minimal precedence. Precedence is necessary to disambiguate tactic expressions such as `a by b; c`. Should this be interpreted as `a by (b; c)`, or `(a by b); c`? This depends on the precedence of the argument `b` to `a`. At tactic level 3, which we will use all throughout this post for consistency, it is parsed as `(a by b); c`.
 
-# 2. `define`
+## 2. `define`
 
 By and large, tactics are used to construct *opaque* terms. With the exception of tactics like `set` and `pose`, the definitions of most terms we add to our hypothesis list are completed forgotten; only their type is retained. Most often this is desirable, but occasionally we'd like to actually retain the definition of a term we build tactically.
 
@@ -78,7 +78,7 @@ Tactic Notation "define" "exists" "by" tactic3(tac) :=
 Again, we use the `unshelve` trick, this time with `eexists`.
 
 
-# 3. `forward`
+## 3. `forward`
 
 Given a functional hypothesis `H : forall a: A, B a`, or in the nondependent case,
 `H : A -> B`, `forward H` focuses the new subgoal `A`, which it then uses to specialize `H`. The name therefore comes from the concept of "forward reasoning".
@@ -103,7 +103,7 @@ To accomplish our task, we use the previous `define` tactic to build our term, w
 
 Why do we use `define` here instead of one of a standard tactic? I.e., why do we want the specializing term to be transparent? In the nondependent case `H : A -> B`, it won't make a difference. However, for the dependent case `H : forall a: A, B a`, the particular term `a: A` is generally significant, and therefore shouldn't be obscured.
 
-# 4. `(dependent) inv(c)`
+## 4. `(dependent) inv(c)`
 
 Inversion in Coq can get downright *ugly*. The proof state is often absolutely littered with new hypotheses. There are only so many times one can write `inversion H; subst` before creating a shorthand. We introduce such a shorthand with the tactic `inv`. Similarly, `invc H` will perform `inv H`, then `clear H`, which I find is desirable more often than not.
 
@@ -186,7 +186,7 @@ Tactic Notation "dependent" "invc" hyp(H) "as" simple_intropattern(pat) :=
   subst!.
 ```
 
-# 5. `gen / to`
+## 5. `gen / to`
 
 Sometimes, one's hypothesis is just too specific, and needs to be weakened. In particular, this issue often arises as we prepare to induct on a hypothesis. The tactic `gen x := y to P in H` will replace term `y` in `H` with the variable `x`, where `x` satisfies the predicate `P`. The definition of `x` is then discarded. It therefore "generalizes" `y` up to the predicate.
 
@@ -215,7 +215,7 @@ Tactic Notation "gen" ident(I) ":=" constr(l) "to" uconstr(P) "in" hyp(H) :=
 ```
 I define many more variants of `gen / to`, for example with a `by` clause, but the implementations are all obvious, following the general idioms followed by the standard tactics.
 
-# 6. `foreach`, `forsome`, and other list-based tactics
+## 6. `foreach`, `forsome`, and other list-based tactics
 
 It would be nice to have some tactics which operate over lists. Specifically, lists of
 hypotheses. For instance, a `foreach` combinator could apply some tactic to every hypothesis in a list (necessarily succeeding on each), and a `forsome` tactic could do the same, but stop on the first success (and failing if none succeeded).
@@ -323,7 +323,7 @@ Tactic Notation "env_delta" tactic3(tac) tactic3(cont) :=
 
 Here, we build a list only of the *new* hypotheses introduced into the environment by `tac`. We do this by grabbing the environment before and after `tac` is executed, and then calculating their difference.
 
-# 7. `(max) induct(!)`
+## 7. `(max) induct(!)`
 
 The standard `induction` tactic can be surprisingly lacking in a couple of ways. First, it discards information when the arguments to the inductive term are not simple variables.
 
@@ -495,7 +495,7 @@ Tactic Notation "max" "induct!" hyp(H) "as" simple_intropattern(pat) :=
 ...
 ```
 
-# 8. `tedious`/`follows`
+## 8. `tedious`/`follows`
 
 I'll end with a tactic which has been extremely useful to me, but I'd also consider to be quite experimental. I am quite a fan of the `easy` tactic, and the related `now` tactic, which automatically solves some simple goals. However, I got frustrated that it was unable to solve certain goals, such as those which would follow from one or two `constructor` applications, or by `eauto`.
 

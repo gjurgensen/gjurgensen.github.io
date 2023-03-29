@@ -432,4 +432,4 @@ Now we see that $\Sigma$-types do in fact strongly correspond to summations. So 
 
 A very similar story can be told of $\Pi$-types. Namely, we have $\|\Pi x: X. f\ x\| = \Pi x: X. \|f\ x\|$. Just as degenerate summations corresponded to binary products, we can see that degenerate products correspond to exponentiation: $\forall a b, b^a = \Pi x \in [1,a]. b$, or in terms of types, $\forall A B: Type. A \rightarrow B \cong \Pi x: A. B$.
 
-# Footnotes
+## Footnotes

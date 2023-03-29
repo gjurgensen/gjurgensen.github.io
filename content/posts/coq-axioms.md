@@ -15,7 +15,7 @@ I'd argue that there are several axioms which are perfectly reasonable, and even
 
 For readability, I take a number of notational liberties, including using `∀`, `∃`, `≠`, and `λ` for `forall`, `exists`, `<>`, and `fun` respectively.
 
-# 1. UIP
+## 1. UIP
 
 UIP stands for "uniqueness (unicity) of identity proofs". Recall that the "identity" type is another name for the equality type. Formally, UIP makes the following claim:
 
@@ -98,7 +98,7 @@ This begs the question: *why* can't the `match` construct handle precise elimina
 
 Whatever the reason is, I can confidently say that asserting UIP axiomatically is very safe, and the only reasons I can imagine why we wouldn't want to do so is if the statement is provable by a more powerful axiom, or if it it conflicts with another axiom (for instance, UIP is incompatible with the univalence axiom of homotopic type theory).
 
-# 2. Functional Extensionality
+## 2. Functional Extensionality
 
 It turns out, quite a few common axioms revolve around equality. Functional extensionality, as the name implies, specifically expands our notion of equality on functions.
 
@@ -125,7 +125,7 @@ This is why functional extensionality is so useful. Using the extensionality axi
 
 The axiom is intuitive, but is it consistent? It is, since the only functions which we can prove to be unequal are exactly those which are extensionally unequal. You may be worried that we could leverage the differing internal structure of two functions like `id_nat` and `plus_0` to extract some difference between the two, but the only way to do that would be to use a `match` construct, which is unable to distinguish functions by syntax.
 
-# 3. Proof Irrelevance
+## 3. Proof Irrelevance
 
 Now, we are slowly leaving the territory of "obvious" axioms. From here on out, the axioms we discuss will increasingly necessitate conscious dedication to a certain interpretation of objects or approach.
 
@@ -152,7 +152,7 @@ In reality, we *cannot* prove `bar ≠ baz` in Coq. The details aren't important
 Why is this desirable? We have to remember the intended usage of the `Prop` universe, which is meant to represent logical propositions. Generally, we only care whether or not a specific `Prop` is inhabited or not. From this perspective, proof irrelevance is quite natural.
 We are motivated less by the "positive" notion that proof terms over the same proposition should be equal, but rather by the "negative" notion that such proof terms aught not to be distinguished.
 
-# 4. Propositional Extensionality
+## 4. Propositional Extensionality
 
 Here, we continue to extend our notion of equality, this time between propositions. Propositional extensionality states the following:
 
@@ -164,7 +164,7 @@ Again, we are softening our notion of literal equality, and replacing it with so
 
 This axiom is possible due to our limited means of distinguishing between propositions. We cannot distinguish them syntactically, nor can we distinguish by specific inhabitants. We are only left with their "strength", as characterized by the ordering associated with implication. This "strength", the information carried by the proof, is how we identify propositions under propositional extensionality.
 
-# 5. The Law of the Excluded Middle
+## 5. The Law of the Excluded Middle
 
 At the core, each formal system is simply a set of unambiguous rules on uninterpreted symbols. We then choose to impose some interpretation on these symbols, with the range of valid interpretations being constrained by our rules.
 
@@ -205,7 +205,7 @@ However, I would note that the `Prop` universe provides an extremely impoverishe
 
 Finally, before moving on, I should note that LEM implies some of the previously mentioned axioms: UIP and proof irrelevance. If you accept LEM, there is no reason to accept the other two axiomatically; you can derive them instead. It is always a good idea to minimize our collection of axioms when possible.
 
-# 6. Choice
+## 6. Choice
 
 The axiom of choice has a long history in mainstream mathematics, with some philosophical objections to the concept. The choice of whether to axiomatize it in Coq is another matter entirely.
 
@@ -259,7 +259,7 @@ In the opposite direction, we first note that our `fun_choice` axiom derives a p
 
 The various formulations of choice are generally quite safe to axiomatize. The only issue I am aware of arises when one combines choice and LEM with the `-impredicative-set` flag, which together are known to be inconsistent.
 
-# 7. Description
+## 7. Description
 
 All of the axioms up to this point I have chosen to accept myself in day-to-day use. That ends with *description*, which make very little sense under a traditional interpretation of the `Prop` and `Type` universes. Consider the definition of indefinite description:
 

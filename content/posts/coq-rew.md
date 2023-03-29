@@ -107,7 +107,7 @@ Qed.
 ```
 
 
-# Automation
+## Automation
 
  Now that we think we know the general approach to rewriting, why don't we try to properly
    generalize it by writing our own rewrite tactic?
