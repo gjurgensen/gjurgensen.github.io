@@ -12,6 +12,9 @@
 
   font-family: "Lucida Console","Courier New",monospace;
   line-height: 1.25;
+
+  /* min-width: 100%; */
+  overflow: scroll;
 }
 
 .chroma code {

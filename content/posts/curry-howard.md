@@ -75,7 +75,9 @@ $$
 \cfrac{\Gamma \vdash a: A}{\Gamma \vdash inl\ a : A + B}[+\text{-I}_1]
 \qquad
 \cfrac{\Gamma \vdash b: B}{\Gamma \vdash inr\ b : A + B}[+\text{-I}_2]
-\qquad
+$$
+
+$$
 \cfrac{\Gamma \vdash f : A \rightarrow C \qquad \Gamma \vdash g : B \rightarrow C \qquad \Gamma \vdash x : A + B}{\Gamma \vdash case\ f\ g\ x : C}[+\text{-E}]
 $$
 

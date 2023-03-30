@@ -181,6 +181,25 @@ a:visited {
   color: var(--accent-purple);
 }
 
+
+/* TODO: can katex linebreak instead of scroll? */
+.katex-display {
+  display: flex;
+  flex-direction: column;
+}
+.katex-display > .katex {
+  display: flex;
+  overflow-x: scroll;
+  overflow-y: visible;
+  padding-bottom: 1em;
+}
+
+
+.highlight {
+  display: flex;
+  flex-direction: column;
+}
+
 code {
   color: var(--accent-red);
   font-family: "Lucida Console","Courier New",monospace;
