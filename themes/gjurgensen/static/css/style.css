@@ -183,7 +183,7 @@ a:visited {
 
 code {
   color: var(--accent-red);
-  font-family: "Courier New",monospace;
+  font-family: "Lucida Console","Courier New",monospace;
 
   /* This should only apply to inline code; it is overwritten in `.chroma code`*/
   padding-left: 4px;
