@@ -2,10 +2,7 @@
 name: Deploy Hugo site to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["master"]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -30,13 +27,19 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
-    env:
-      HUGO_VERSION: 0.108.0
     steps:
+      - name: Install dependencies
+        run: sudo apt update -y && sudo apt install -y git golang
+      - name: Install custom chroma
+        run: |
+          git clone --depth 1 --branch v2.12.0 https://github.com/alecthomas/chroma.git ${{ runner.temp }}/chroma \
+          && command cp -f lexers/* ${{ runner.temp }}/chroma/lexers/embedded
       - name: Install Hugo CLI
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          git clone --depth 1 --branch v2.12.0 https://github.com/gohugoio/hugo.git ${{ runner.temp }}/hugo \
+          && go mod edit -replace github.com/alecthomas/chroma=${{ runner.temp }}/chroma \
+          && go mod tidy \
+          && go build
       - name: Install Dart Sass Embedded
         run: sudo snap install dart-sass-embedded
       - name: Checkout
@@ -54,7 +57,7 @@ jobs:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
-          hugo \
+          ${{ runner.temp }}/hugo/hugo \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
       - name: Upload artifact
@@ -69,6 +72,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
