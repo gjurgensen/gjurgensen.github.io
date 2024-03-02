@@ -33,7 +33,7 @@ jobs:
       - name: Install custom chroma
         run: |
           git clone --depth 1 --branch v2.12.0 https://github.com/alecthomas/chroma.git ${{ runner.temp }}/chroma \
-          && command cp -f lexers/* ${{ runner.temp }}/chroma/lexers/embedded
+          && command cp -f ${{ GITHUB_WORKSPACE }}lexers/* ${{ runner.temp }}/chroma/lexers/embedded
       - name: Install Hugo CLI
         run: |
           git clone --depth 1 --branch v2.12.0 https://github.com/gohugoio/hugo.git ${{ runner.temp }}/hugo \
