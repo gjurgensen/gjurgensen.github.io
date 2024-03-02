@@ -40,7 +40,7 @@ jobs:
           && command cp -f ${{ github.workspace }}/lexers/* ${{ runner.temp }}/chroma/lexers/embedded
       - name: Install Hugo CLI
         run: |
-          git clone --depth 1 --branch v2.12.0 https://github.com/gohugoio/hugo.git ${{ runner.temp }}/hugo \
+          git clone --depth 1 --branch release-0.116.0 https://github.com/gohugoio/hugo.git ${{ runner.temp }}/hugo \
           && go mod edit -replace github.com/alecthomas/chroma=${{ runner.temp }}/chroma \
           && go mod tidy \
           && go build
