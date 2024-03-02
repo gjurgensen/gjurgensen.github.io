@@ -2,10 +2,7 @@
 name: Deploy Hugo site to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["master"]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -30,19 +27,29 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
-    env:
-      HUGO_VERSION: 0.108.0
     steps:
-      - name: Install Hugo CLI
+      - name: Install Git, Go
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
-      - name: Install Dart Sass Embedded
-        run: sudo snap install dart-sass-embedded
+          sudo apt update -y \
+          && sudo apt install -y git \
+          && sudo snap install --classic go
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
+      - name: Install custom chroma
+        run: |
+          git clone --depth 1 --branch v2.12.0 https://github.com/alecthomas/chroma.git ${{ runner.temp }}/chroma \
+          && command cp -f ${{ github.workspace }}/lexers/* ${{ runner.temp }}/chroma/lexers/embedded
+      - name: Install Hugo CLI
+        run: |
+          git clone --depth 1 --branch release-0.116.0 https://github.com/gohugoio/hugo.git ${{ runner.temp }}/hugo \
+          && cd ${{ runner.temp }}/hugo \
+          && go mod edit -replace github.com/alecthomas/chroma=${{ runner.temp }}/chroma \
+          && go mod tidy \
+          && go build
+      - name: Install Dart Sass Embedded
+        run: sudo snap install dart-sass-embedded
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
@@ -54,7 +61,7 @@ jobs:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
         run: |
-          hugo \
+          ${{ runner.temp }}/hugo/hugo \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
       - name: Upload artifact
@@ -69,6 +76,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
