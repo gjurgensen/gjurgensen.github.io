@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt update -y \
           && sudo apt install -y git \
-          && sudo snap install go
+          && sudo snap install --classic go
       - name: Checkout
         uses: actions/checkout@v3
         with:
