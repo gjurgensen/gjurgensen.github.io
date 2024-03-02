@@ -29,7 +29,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
-        run: sudo apt update -y && sudo apt install -y git golang
+        # run: sudo apt update -y && sudo apt install -y git golang
+        run: |
+          sudo apt update -y \
+          && sudo apt install -y git \
+          && sudo snap install go
       - name: Checkout
         uses: actions/checkout@v3
         with:
