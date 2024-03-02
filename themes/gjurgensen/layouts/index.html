@@ -1,3 +1,15 @@
 {{ define "main" }}
 {{ .Content }}
+<h1 class="title" style="padding-top:1em;">Recent Posts</h1>
+{{ range where .Site.RegularPages "Type" "posts" | first 3 }}
+<div class="pages-entry">
+  <a href="{{ .Permalink }}"><h3>{{ .Title }}</h3></a>
+  {{ with .PublishDate }}
+  <time>
+    {{ .Format "January 2, 2006" }}
+  </time>
+  {{ end }}
+</div>
+{{ end }}
+<a href="/posts">See All</a>
 {{ end }}
