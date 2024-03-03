@@ -10,14 +10,17 @@
   --dark2: #aaaaa1;
 
   --accent-red: #d13353;
-  --accent-blue: #1a70c7;
+  /* --accent-blue: #1a70c7; */
+  --accent-blue: #3b94ec;
   --accent-yellow: #d7b700;
   --accent-green: #687e23;
   --accent-brown: #826c48;
-  --accent-purple: #6947dc;
+  /* --accent-purple: #6947dc; */
+  --accent-purple: #9671db;
   --accent-cyan: #39a98a;
   /* --accent-cyan: #1abfc7; */
   /* --accent-cyan: #43a8a6; */
+  --accent-pink: #eb94ec;
 
   --accent-blue-light: #5399e0;
   --accent-purple-light: #8a6bef;

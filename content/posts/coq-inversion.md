@@ -8,16 +8,16 @@ Tag: Coq
 
 ## Inversion
 
- When I first learned about the `inversion` tactic, I was constantly getting it
-   mixed up with `destruct`. When plugging in a USB drive, one always finds themselves
+ When I first learned about the {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} tactic, I was constantly getting it
+   mixed up with {{<highlight Coq "hl_inline=true">}}destruct{{</highlight>}}. When plugging in a USB drive, one always finds themselves
    trying the wrong side first. Similarly, I would always try the wrong tactic first
    before realizing my mistake.
 
-   In fact, the two are quite similar in their goal. `destruct` is the classic means
-   of case analysis. When one invokes `destruct x`, the proof branches into $n$ proof
-   goals, for the $n$ constructors of the inductive type `x`.
+   In fact, the two are quite similar in their goal. {{<highlight Coq "hl_inline=true">}}destruct{{</highlight>}} is the classic means
+   of case analysis. When one invokes {{<highlight Coq "hl_inline=true">}}destruct x{{</highlight>}}, the proof branches into $n$ proof
+   goals, for the $n$ constructors of the inductive type {{<highlight Coq "hl_inline=true">}}x{{</highlight>}}.
 
-   Let's take a look at what a proof using `destruct` looks like under the hood.
+   Let's take a look at what a proof using {{<highlight Coq "hl_inline=true">}}destruct{{</highlight>}} looks like under the hood.
 
 ```Coq
 Lemma andb_true: forall b: bool, andb b true = b.
@@ -35,12 +35,12 @@ Print andb_true.
 ```
 
 
- `destruct` structures our proof term as an if statement. More generally, it
+ {{<highlight Coq "hl_inline=true">}}destruct{{</highlight>}} structures our proof term as an if statement. More generally, it
    generates a match statement on the inductive term's constructors.
 
    It is important to note here that the match statement does not take into account
    any parameters to the inductive term which should in theory contradict certain
-   cases. Because `destruct` just generates a simple `match`, this information is
+   cases. Because {{<highlight Coq "hl_inline=true">}}destruct{{</highlight>}} just generates a simple {{<highlight Coq "hl_inline=true">}}match{{</highlight>}}, this information is
    not taken into account, and is actually erased!
 
    Let's construct an example.
@@ -57,7 +57,7 @@ Proof using.
 ```
 
 
- We would like to perform case analysis on the `even 1` term to show both options
+ We would like to perform case analysis on the {{<highlight Coq "hl_inline=true">}}even 1{{</highlight>}} term to show both options
    are impossible.
 
 ```Coq
@@ -65,20 +65,20 @@ Proof using.
 ```
 
 
- But we lose the information that the term was parameterized over `1`!
+ But we lose the information that the term was parameterized over {{<highlight Coq "hl_inline=true">}}1{{</highlight>}}!
 ```Coq
   Undo.
 ```
 
 
- Even if we use the `eqn` variant, `destruct` will erase our parameter.
+ Even if we use the {{<highlight Coq "hl_inline=true">}}eqn{{</highlight>}} variant, {{<highlight Coq "hl_inline=true">}}destruct{{</highlight>}} will erase our parameter.
 ```Coq
   destruct contra eqn:case.
   Undo.
 ```
 
 
- What we need here is inversion. `inversion` also considers the possible constructors
+ What we need here is inversion. {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} also considers the possible constructors
    of the term. However, it actually looks at the values of the inductive term's
    parameters to determine which cases are impossible.
 
@@ -86,7 +86,7 @@ Proof using.
    them in reverse. What constructors could have produced this term? The name
    "inversion" is intentionally suggestive of this backward reasoning over constructors.
 
-   In this case, `inversion` solves our goal instantly, since there are no possible
+   In this case, {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} solves our goal instantly, since there are no possible
    cases.
 
 ```Coq
@@ -94,7 +94,7 @@ Proof using.
 ```
 
 
- How would we go about replicating this behavior? Well, we know `destruct` erases
+ How would we go about replicating this behavior? Well, we know {{<highlight Coq "hl_inline=true">}}destruct{{</highlight>}} erases
    the value of our parameters, but what if we replaced our values with variables,
    and specified the value of the variable in a separate hypothesis?
 
@@ -105,7 +105,7 @@ Proof using.
 ```
 
 
- The parameter is still being erased! The reason why is that the value of `x` is
+ The parameter is still being erased! The reason why is that the value of {{<highlight Coq "hl_inline=true">}}x{{</highlight>}} is
    overwritten by the case analysis. What we need to do is remember the value of x
    in a separate hypothesis as an equality.
 
@@ -124,7 +124,7 @@ Proof using.
 ```
 
 
- There we go! We see the `x_eq` hypothesis was preserved, which we can discriminate
+ There we go! We see the {{<highlight Coq "hl_inline=true">}}x_eq{{</highlight>}} hypothesis was preserved, which we can discriminate
    in both cases.
 
 ```Coq
@@ -224,13 +224,13 @@ Qed.
 ```
 
 
- Clearly, we can see our little `inv` tactic is really helpful for reasoning about
+ Clearly, we can see our little {{<highlight Coq "hl_inline=true">}}inv{{</highlight>}} tactic is really helpful for reasoning about
    these dependent terms!
 
-   To close things out, I should point out that our `inv` tactic actually diverges from
-   the `inversion` tactic in a couple important ways. First, the `inversion` tactic
+   To close things out, I should point out that our {{<highlight Coq "hl_inline=true">}}inv{{</highlight>}} tactic actually diverges from
+   the {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} tactic in a couple important ways. First, the {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} tactic
    will actually preserve the original term. For instance, consider again the
-   `andb_true` proof.
+   {{<highlight Coq "hl_inline=true">}}andb_true{{</highlight>}} proof.
 
 
 ```Coq
@@ -240,7 +240,7 @@ Proof using.
 ```
 
 
- Using `inversion` here on `b` won't actually destruct it, although it will fork
+ Using {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} here on {{<highlight Coq "hl_inline=true">}}b{{</highlight>}} won't actually destruct it, although it will fork
    our proof goal into two identical goals.
 
 ```Coq
@@ -249,7 +249,7 @@ Proof using.
 ```
 
 
- This is because `inversion` actually makes a copy of the term, and destructs the
+ This is because {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} actually makes a copy of the term, and destructs the
    copy. The idea is that we only want inversion to perform case analysis on the facts
    which produced the constructor, not on the constructor itself. We can replicate that
    behavior easily enough.
@@ -268,7 +268,7 @@ Abort.
 ```
 
 
- The other thing `inversion` can do that `inv` can't is extract sub-equalities:
+ The other thing {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}} can do that {{<highlight Coq "hl_inline=true">}}inv{{</highlight>}} can't is extract sub-equalities:
 ```Coq
 Goal forall a b, S a = S b -> a = b.
   intros * H.
@@ -277,9 +277,9 @@ Goal forall a b, S a = S b -> a = b.
 
 
  However, this behavior is not in line with the goal of the rest of the tactic,
-   so I'd argue is out of place being included in `inversion`.
+   so I'd argue is out of place being included in {{<highlight Coq "hl_inline=true">}}inversion{{</highlight>}}.
 
-   The more specialized `injectivity` accomplishes the same fundamental task:
+   The more specialized {{<highlight Coq "hl_inline=true">}}injectivity{{</highlight>}} accomplishes the same fundamental task:
 
 ```Coq
   Undo.

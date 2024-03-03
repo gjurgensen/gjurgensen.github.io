@@ -22,13 +22,13 @@
       <rule pattern="#\d*Y.*$">
         <token type="CommentSpecial"/>
       </rule>
-      <rule pattern="\b(defun|define|defthm|thm|defrule)\b">
+      <rule pattern="(?&lt;!(\w|\-))(defun-sk|defun|define-sk|define|defthm|thm|defrule|defchoose|defequiv)(?!(\w|\-))">
         <token type="KeywordNamespace"/>
       </rule>
-      <rule pattern="\b(xargs|declare|local|encapsulate|ignore|if|progn)\b">
+      <rule pattern="(?&lt;!(\w|\-))(xargs|declare|local|encapsulate|ignore|if|progn)(?!(\w|\-))">
         <token type="Keyword"/>
       </rule>
-      <rule pattern="\b(implies|and|or|xor|iff|equal|eq|eql|cons|hons|car|cdr|consp|er)\b">
+      <rule pattern="(?&lt;!(\w|\-))(implies|not|and|or|xor|iff|equal|eq|eql|cons|hons|car|cdr|consp|er|forall|exists|mbt|mbe|nfix|enable|disable)(?!(\w|\-))">
         <token type="KeywordPseudo"/>
       </rule>
       <rule pattern="(\*|=&gt;)">
