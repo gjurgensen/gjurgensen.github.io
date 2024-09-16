@@ -213,11 +213,9 @@ If $a$ is a proof of $A$, and $b$ a proof of $B$, shouldn't the pair of proofs $
 If you don't believe me, take another look at the introduction rules for $\times$ and $\wedge$, this time with further emphasis:
 
 $$
-% \cfrac{\Gamma \vdash a: A \qquad \Gamma \vdash b: B}{\Gamma \vdash (a, b) : A \times B}[\times\text{-I}]
-\cfrac{\Gamma \vdash \color{#c84c1b}{a:} A \qquad \Gamma \vdash \color{#c84c1b}{b:} B}{\Gamma \vdash \color{#c84c1b}{(a, b) :} A \color{#c84c1b}\times B}[\times\text{-I}]
+\cfrac{\Gamma \vdash {\color{#c84c1b}a:} A \qquad \Gamma \vdash {\color{#c84c1b}b:} B}{\Gamma \vdash {\color{#c84c1b}(a, b) :} A {\color{#c84c1b}\times} B}[\times\text{-I}]
 \qquad
-\cfrac{\Gamma \vdash A \qquad \Gamma \vdash B}{\Gamma \vdash A \color{#c84c1b}\wedge B}[\wedge\text{-I}]
-% \cfrac{\color{#c84c1b}{A \qquad B}}{\color{#c84c1b}{A \wedge B}}[\wedge\text{-I}]
+\cfrac{\Gamma \vdash A \qquad \Gamma \vdash B}{\Gamma \vdash A {\color{#c84c1b}\wedge} B}[\wedge\text{-I}]
 $$
 
 Rather than highlighting the rules' commonalities, it was simpler for me to highlight their differences. Aside from the symbol, the only difference is that the type rules keep track of the term (or proof?) in question.
