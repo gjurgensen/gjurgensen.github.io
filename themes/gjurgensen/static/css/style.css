@@ -11,11 +11,11 @@
   --accent: #a24929;   /* site name, nav, links */
 
   /* Syntax highlighting (code.css) */
-  --syn-keyword: #a03f3c;
-  --syn-type: #157171;
-  --syn-function: #915c08;
-  --syn-string: #566d27;
-  --syn-number: #834d7e;
+  --syn-keyword: #c23637;
+  --syn-type: #19728e;
+  --syn-function: #965d17;
+  --syn-string: #42761d;
+  --syn-number: #a93ca3;
 
   --site-width: 50rem;
 }
