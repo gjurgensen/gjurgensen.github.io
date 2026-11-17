@@ -82,9 +82,6 @@
 }
 
 html {
-  position: relative;
-  min-height: 100%;
-
   font-size: 16px;
 }
 
@@ -96,8 +93,12 @@ body {
   font-size: 18px;
   line-height: 1.6;
 
+  /* Header, content and footer stack in a column at least as tall as the
+     window; the content stretches, so the footer sits at the bottom of short
+     pages and after the content on long ones. */
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   margin: 0 auto;
 }
 
@@ -107,7 +108,7 @@ body {
   background-color: var(--surface);
   padding: 0.5rem;
 
-  border: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 
   justify-content: center;
   margin: 0 auto;
@@ -125,34 +126,32 @@ body {
   text-decoration: none;
 }
 
+/* The site name and the links share one row, and the links wrap onto a
+   second row when the screen is too narrow for both. */
 #nav-content {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem 2rem;
 
   width: var(--site-width);
   margin: 0 auto;
-
-  /* Useful for visualizing spacing */
-  /* border: 1px dashed blue; */
 }
 
-#nav-left th {
-  text-align: left;
-  /* Useful for visualizing spacing */
-  /* border: 1px dashed red; */
-
-  padding-right: 32px;
+#site-name {
   font-weight: bold;
 }
 
-#nav-right th {
-  text-align: right;
-  /* Useful for visualizing spacing */
-  /* border: 1px dashed red; */
+#nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 2rem;
 
-  padding-left: 32px;
-  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 /* A fixed-size box, so the nav doesn't shift as the icon changes. */
@@ -194,8 +193,8 @@ body {
 }
 
 #content-container {
+  flex: 1 0 auto;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   margin: 0 auto;
 
@@ -208,8 +207,8 @@ body {
   margin-left: 1rem;
   margin-right: 1rem;
 
-  /* This is just to add space before the footer */
-  margin-bottom: 6rem;
+  /* Space before the footer */
+  margin-bottom: 3rem;
 }
 
 /* Keep 2rem above --site-width (media queries can't use variables). */
@@ -221,6 +220,10 @@ body {
 
   #content {
     width: calc(100% - 2rem);
+  }
+
+  #nav-content {
+    width: calc(100% - 1rem);
   }
 }
 
@@ -318,59 +321,30 @@ hr {
 }
 
 footer {
-  position: absolute;
-  bottom: 0px;
-  margin-top: -64rem;
-  left: 0;
-  right: 0;
-
   display: flex;
 
   background-color: var(--surface);
   padding: 0.5rem;
-  margin-top: 2rem;
 
   border-top: 1px solid var(--border);
 
   justify-content: center;
 }
 
+/* Copyright on the left and source link on the right; they move onto
+   separate lines when the screen is too narrow for both. */
 #footer-content {
-  /* position: absolute; */
-  /* bottom: 0; */
-
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
+  gap: 0.25rem 2rem;
+
+  /* On narrow screens, inset like the page content (footer padding + 0.5rem). */
   width: var(--site-width);
-
-  /* Useful for visualizing spacing */
-  /* border: 1px dashed blue; */
-}
-
-#footer-left th {
-  text-align: left;
-  /* Useful for visualizing spacing */
-  /* border: 1px dashed red; */
-
-  padding-right: 32px;
-  font-weight: bold;
+  max-width: calc(100% - 1rem);
 
   color: var(--muted);
-  font-size: 12px;
-}
-
-/* TODO: "Website hosted on" message overhangs slightly? */
-#footer-right th {
-  text-align: right;
-  /* Useful for visualizing spacing */
-  /* border: 1px dashed red; */
-
-  padding-left: 32px;
-  font-weight: normal;
-
-  color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 #not-found {

@@ -1,16 +1,11 @@
 <header>
-  <nav class="navbar" role="navigation">
+  <nav class="navbar">
     <div id="nav-content">
-      <table id="nav-left">
-        <tr>
-          <th><a href="/">Grant Jurgensen</a></th>
-        </tr>
-      </table>
-      <table id="nav-right">
-        <tr>
-          <th><a href="/posts">Posts</a></th>
-          <th><a href="/publications">Publications</a></th>
-          <th>
+      <a id="site-name" href="/">Grant Jurgensen</a>
+      <ul id="nav-links">
+        <li><a href="/posts">Posts</a></li>
+        <li><a href="/publications">Publications</a></li>
+        <li>
             {{- /*
               Theme toggle. Shows the current theme; CSS in style.css picks
               which icon is visible from the data-theme attribute on <html>.
@@ -49,9 +44,8 @@
                 <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
               </svg>
             </button>
-          </th>
-        </tr>
-      </table>
+        </li>
+      </ul>
     </div>
   </nav>
 </header>
