@@ -5,7 +5,7 @@ math: true
 draft: false
 ---
 
-![Propositions as types](/images/props_as_types_small.png)
+![Propositions as types](/images/props_as_types_small.webp)
 
 ## Background
 

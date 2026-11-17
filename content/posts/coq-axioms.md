@@ -5,7 +5,7 @@ draft: false
 tag: Coq
 ---
 
-![A Fistful of Dollars](/images/a_fistful_of_dollars.png)
+![A Fistful of Dollars](/images/a_fistful_of_dollars.webp)
 
 As we all know, one should only introduce axioms into a proof environment with the utmost care. Introducing a contradictable axiom would be disastrous. Our logic would lose all meaning once all objects are provable.
 
