@@ -10,8 +10,88 @@
         <tr>
           <th><a href="/posts">Posts</a></th>
           <th><a href="/publications">Publications</a></th>
+          <th>
+            {{- /*
+              Theme toggle. Shows the current theme; CSS in style.css picks
+              which icon is visible from the data-theme attribute on <html>.
+
+              The icons are sun-moon, sun and moon from Lucide v0.460.0
+              (https://lucide.dev), under the ISC License. Its full notice is
+              in static/licenses/lucide.txt. Hugo drops ordinary HTML comments,
+              so the attribution below is emitted with safeHTML to keep it in
+              the published pages.
+            */ -}}
+            {{ "<!-- Icons: Lucide v0.460.0 (https://lucide.dev), ISC License. Copyright (c) Lucide Contributors 2022; portions Copyright (c) Cole Bemis 2013-2022 (Feather, MIT). Full notice: /licenses/lucide.txt -->" | safeHTML }}
+            <button id="theme-toggle" type="button" hidden>
+              <svg class="icon-auto" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.9 4.9 1.4 1.4" />
+                <path d="m17.7 17.7 1.4 1.4" />
+                <path d="M2 12h2" />
+                <path d="M20 12h2" />
+                <path d="m6.3 17.7-1.4 1.4" />
+                <path d="m19.1 4.9-1.4 1.4" />
+              </svg>
+              <svg class="icon-light" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.93 4.93 1.41 1.41" />
+                <path d="m17.66 17.66 1.41 1.41" />
+                <path d="M2 12h2" />
+                <path d="M20 12h2" />
+                <path d="m6.34 17.66-1.41 1.41" />
+                <path d="m19.07 4.93-1.41 1.41" />
+              </svg>
+              <svg class="icon-dark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+              </svg>
+            </button>
+          </th>
         </tr>
       </table>
     </div>
   </nav>
 </header>
+
+<!-- Cycles the theme: follow the system, then light, then dark. The button
+     stays hidden without JavaScript, where the system setting applies. -->
+<script>
+  (function () {
+    var button = document.getElementById("theme-toggle");
+    var root = document.documentElement;
+    var order = ["auto", "light", "dark"];
+    var labels = { auto: "follow system", light: "light", dark: "dark" };
+
+    function current() {
+      return root.dataset.theme || "auto";
+    }
+
+    function render() {
+      button.title = "Theme: " + labels[current()] + " (click to change)";
+      button.setAttribute("aria-label", button.title);
+    }
+
+    button.addEventListener("click", function () {
+      var next = order[(order.indexOf(current()) + 1) % order.length];
+      if (next === "auto") {
+        delete root.dataset.theme;
+      } else {
+        root.dataset.theme = next;
+      }
+      try {
+        if (next === "auto") {
+          localStorage.removeItem("theme");
+        } else {
+          localStorage.setItem("theme", next);
+        }
+      } catch (e) {}
+      render();
+    });
+
+    render();
+    button.hidden = false;
+  })();
+</script>

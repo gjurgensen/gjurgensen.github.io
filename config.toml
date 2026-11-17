@@ -4,3 +4,7 @@ title = 'Grant Jurgensen'
 theme = 'gjurgensen'
 
 markup.highlight.noClasses = false
+
+# Keep HTML comments when minifying, so the third-party license notices
+# emitted by the theme (e.g. Lucide's, in header.html) reach the published site.
+minify.tdewolff.html.keepComments = true

@@ -1,40 +1,35 @@
-/* Warm retro palette. Every text colour meets 4.5:1 contrast against both
-   --bg and --surface, in both light and dark mode. */
+/* Warm retro palette, as light-dark(light value, dark value) pairs. Every
+   text colour meets 4.5:1 contrast against both --bg and --surface, in both
+   themes.
+
+   The theme follows the reader's system setting unless the nav toggle has
+   set data-theme on <html> (see head.html and header.html). */
 :root {
   color-scheme: light dark;
 
-  --bg: #fdf6e6;
-  --surface: #f5ecda;  /* navbar, footer, code blocks */
-  --border: #e1d6c2;
-  --text: #352c24;
-  --muted: #6d6154;    /* dates, footer, code comments and punctuation */
-  --accent: #a24929;   /* site name, nav, links */
+  --bg:      light-dark(#fdf6e6, #231e1a);
+  --surface: light-dark(#f5ecda, #2d2822);  /* navbar, footer, code blocks */
+  --border:  light-dark(#e1d6c2, #3d3731);
+  --text:    light-dark(#352c24, #ece0c8);
+  --muted:   light-dark(#6d6154, #a39684);  /* dates, footer, code comments and punctuation */
+  --accent:  light-dark(#a24929, #d19576);  /* site name, nav, links */
 
   /* Syntax highlighting (code.css) */
-  --syn-keyword: #c23637;
-  --syn-type: #19728e;
-  --syn-function: #965d17;
-  --syn-string: #42761d;
-  --syn-number: #a93ca3;
+  --syn-keyword:  light-dark(#c23637, #ed8c84);
+  --syn-type:     light-dark(#19728e, #7cccc1);
+  --syn-function: light-dark(#965d17, #ebc166);
+  --syn-string:   light-dark(#42761d, #b4c875);
+  --syn-number:   light-dark(#a93ca3, #d89bc3);
 
   --site-width: 50rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #231e1a;
-    --surface: #2d2822;
-    --border: #3d3731;
-    --text: #ece0c8;
-    --muted: #a39684;
-    --accent: #d19576;
+:root[data-theme="light"] {
+  color-scheme: light;
+}
 
-    --syn-keyword: #ed8c84;
-    --syn-type: #7cccc1;
-    --syn-function: #ebc166;
-    --syn-string: #b4c875;
-    --syn-number: #d89bc3;
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 html {
@@ -109,6 +104,44 @@ body {
 
   padding-left: 32px;
   font-weight: normal;
+}
+
+/* A fixed-size box, so the nav doesn't shift as the icon changes. */
+#theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  vertical-align: middle;
+
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--accent);
+}
+
+#theme-toggle:hover,
+#theme-toggle:focus-visible {
+  background-color: var(--border);
+}
+
+#theme-toggle[hidden] {
+  display: none;
+}
+
+#theme-toggle svg {
+  display: none;
+  width: 20px;
+  height: 20px;
+}
+
+:root:not([data-theme]) #theme-toggle .icon-auto,
+:root[data-theme="light"] #theme-toggle .icon-light,
+:root[data-theme="dark"] #theme-toggle .icon-dark {
+  display: block;
 }
 
 #content-container {
