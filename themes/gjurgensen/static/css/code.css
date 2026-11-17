@@ -10,7 +10,7 @@
 
   border-left: 2.5px solid var(--muted);
 
-  font-family: "Lucida Console","Courier New",monospace;
+  font-family: var(--font-code);
   line-height: 1.25;
 
   /* min-width: 100%; */

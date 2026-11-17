@@ -21,6 +21,13 @@
   --syn-string:   light-dark(#42761d, #b4c875);
   --syn-number:   light-dark(#a93ca3, #d89bc3);
 
+  /* System fonts only; nothing is downloaded. */
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
+    "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-code: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas,
+    "Source Code Pro", "Fira Mono", "DejaVu Sans Mono", "Liberation Mono",
+    monospace;
+
   --site-width: 50rem;
 }
 
@@ -43,9 +50,9 @@ body {
   background-color: var(--bg);
   color: var(--text);
 
-  font-family: "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
 
   display: flex;
   flex-direction: column;
@@ -163,7 +170,7 @@ body {
   margin-bottom: 6rem;
 }
 
-/* TODO: can hardcoding this be avoided (can't use var) */
+/* Keep 2rem above --site-width (media queries can't use variables). */
 @media (max-width: 52rem) {
   #content-container {
     /* width: calc(100% - 4rem); */
@@ -253,7 +260,8 @@ a code.code-inline [class] {
 
 code {
   color: var(--text);
-  font-family: "Lucida Console","Courier New",monospace;
+  font-family: var(--font-code);
+  font-size: 0.88em;
 
   /* The background and padding are for inline code; `.chroma code` resets
      them inside code blocks. */
