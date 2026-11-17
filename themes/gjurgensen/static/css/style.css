@@ -126,9 +126,12 @@ body {
   text-decoration: none;
 }
 
-/* The site name and the links share one row, and the links wrap onto a
-   second row when the screen is too narrow for both. */
-#nav-content {
+/* The nav and footer rows: items at either end, lined up with the content
+   column, wrapping onto a second line when the screen is too narrow. On narrow
+   screens the max-width insets them like the page content (bar padding plus
+   0.5rem). */
+#nav-content,
+#footer-content {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -136,6 +139,7 @@ body {
   gap: 0.25rem 2rem;
 
   width: var(--site-width);
+  max-width: calc(100% - 1rem);
   margin: 0 auto;
 }
 
@@ -220,10 +224,6 @@ body {
 
   #content {
     width: calc(100% - 2rem);
-  }
-
-  #nav-content {
-    width: calc(100% - 1rem);
   }
 }
 
@@ -331,18 +331,7 @@ footer {
   justify-content: center;
 }
 
-/* Copyright on the left and source link on the right; they move onto
-   separate lines when the screen is too narrow for both. */
 #footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.25rem 2rem;
-
-  /* On narrow screens, inset like the page content (footer padding + 0.5rem). */
-  width: var(--site-width);
-  max-width: calc(100% - 1rem);
-
   color: var(--muted);
   font-size: 14px;
 }
