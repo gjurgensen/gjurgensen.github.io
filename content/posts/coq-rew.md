@@ -1,7 +1,7 @@
 ---
 title: "Coq Equality III"
 date: 2021-08-03 00:00:03
-draft: false;
+draft: false
 tag: Coq
 ---
 

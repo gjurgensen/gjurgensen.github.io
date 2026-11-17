@@ -3,7 +3,7 @@ title: "Coq Equality IV"
 date: 2021-08-03 00:00:04
 math: true
 draft: false
-Tag: Coq
+tag: Coq
 ---
 
 ## Inversion
