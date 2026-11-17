@@ -1,3 +1,46 @@
+/* IBM Plex Sans and Plex Mono, Latin subsets from Fontsource v5.3.0, under the
+   SIL Open Font License 1.1 (static/licenses/ibm-plex-*.txt). Bold italic and
+   bold mono are synthesized by the browser. */
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* Warm retro palette, as light-dark(light value, dark value) pairs. Every
    text colour meets 4.5:1 contrast against both --bg and --surface, in both
    themes.
@@ -21,12 +64,11 @@
   --syn-string:   light-dark(#42761d, #b4c875);
   --syn-number:   light-dark(#a93ca3, #d89bc3);
 
-  /* System fonts only; nothing is downloaded. */
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-    "Noto Sans", "Helvetica Neue", Arial, sans-serif;
-  --font-code: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas,
-    "Source Code Pro", "Fira Mono", "DejaVu Sans Mono", "Liberation Mono",
-    monospace;
+  /* Self-hosted Plex, with system fonts as fallbacks while it loads. */
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    Ubuntu, Cantarell, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-code: "IBM Plex Mono", ui-monospace, "SF Mono", "Cascadia Code", Menlo,
+    Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
 
   --site-width: 50rem;
 }
