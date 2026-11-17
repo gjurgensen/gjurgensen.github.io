@@ -1,31 +1,40 @@
+/* Warm retro palette. Every text colour meets 4.5:1 contrast against both
+   --bg and --surface, in both light and dark mode. */
 :root {
-  --light: #fffff2;
-  --light0: #f7f7ea;
-  --light1: #e1e6cf;
-  --light2: #d4d4ca;
+  color-scheme: light dark;
 
-  --dark: #2a2a28;
-  --dark0: #555551;
-  --dark1: #808079;
-  --dark2: #aaaaa1;
+  --bg: #fdf6e6;
+  --surface: #f5ecda;  /* navbar, footer, code blocks */
+  --border: #e1d6c2;
+  --text: #352c24;
+  --muted: #6d6154;    /* dates, footer, code comments and punctuation */
+  --accent: #a24929;   /* site name, nav, links */
 
-  --accent-red: #d13353;
-  /* --accent-blue: #1a70c7; */
-  --accent-blue: #3b94ec;
-  --accent-yellow: #d7b700;
-  --accent-green: #687e23;
-  --accent-brown: #826c48;
-  /* --accent-purple: #6947dc; */
-  --accent-purple: #9671db;
-  --accent-cyan: #39a98a;
-  /* --accent-cyan: #1abfc7; */
-  /* --accent-cyan: #43a8a6; */
-  --accent-pink: #eb94ec;
-
-  --accent-blue-light: #5399e0;
-  --accent-purple-light: #8a6bef;
+  /* Syntax highlighting (code.css) */
+  --syn-keyword: #a03f3c;
+  --syn-type: #157171;
+  --syn-function: #915c08;
+  --syn-string: #566d27;
+  --syn-number: #834d7e;
 
   --site-width: 50rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #231e1a;
+    --surface: #2d2822;
+    --border: #3d3731;
+    --text: #ece0c8;
+    --muted: #a39684;
+    --accent: #ec996c;
+
+    --syn-keyword: #ed8c84;
+    --syn-type: #7cccc1;
+    --syn-function: #ebc166;
+    --syn-string: #b4c875;
+    --syn-number: #d89bc3;
+  }
 }
 
 html {
@@ -36,8 +45,8 @@ html {
 }
 
 body {
-  background-color: var(--light);
-  color: var(--dark);
+  background-color: var(--bg);
+  color: var(--text);
 
   font-family: "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   font-size: 16px;
@@ -51,10 +60,10 @@ body {
 .navbar {
   display: flex;
 
-  background-color: var(--light0);
+  background-color: var(--surface);
   padding: 0.5rem;
 
-  border: 1px solid var(--light1);
+  border: 1px solid var(--border);
 
   justify-content: center;
   margin: 0 auto;
@@ -62,14 +71,13 @@ body {
 }
 
 .navbar a {
-  color: var(--accent-red);
+  color: var(--accent);
   font-size: 20px;
   text-decoration: none;
 }
 
 .navbar a:visited {
-  color: var(--accent-red);
-  font-size: 22px;
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -162,7 +170,7 @@ img {
 }
 
 time {
-  color: var(--dark2);
+  color: var(--muted);
   font-size: 14px;
 }
 
@@ -176,12 +184,19 @@ img[alt=Headshot] {
 }
 
 a {
-  color: var(--accent-blue);
+  color: var(--accent);
   text-decoration: underline;
 }
 
 a:visited {
-  color: var(--accent-purple);
+  color: var(--accent);
+}
+
+/* Code inside a link takes the link colour, so it matches the underline.
+   The second selector outranks the token colours in code.css. */
+a code,
+a code.code-inline [class] {
+  color: inherit;
 }
 
 
@@ -204,16 +219,19 @@ a:visited {
 }
 
 code {
-  color: var(--accent-red);
+  color: var(--text);
   font-family: "Lucida Console","Courier New",monospace;
 
-  /* This should only apply to inline code; it is overwritten in `.chroma code`*/
+  /* The background and padding are for inline code; `.chroma code` resets
+     them inside code blocks. */
+  background-color: var(--surface);
+  border-radius: 3px;
   padding-left: 4px;
   padding-right: 4px;
 }
 
 hr {
-  color: var(--light2);
+  color: var(--border);
 }
 
 footer {
@@ -225,11 +243,11 @@ footer {
 
   display: flex;
 
-  background-color: var(--light0);
+  background-color: var(--surface);
   padding: 0.5rem;
   margin-top: 2rem;
 
-  border-top: 1px solid var(--light1);
+  border-top: 1px solid var(--border);
 
   justify-content: center;
 }
@@ -255,7 +273,7 @@ footer {
   padding-right: 32px;
   font-weight: bold;
 
-  color: var(--dark2);
+  color: var(--muted);
   font-size: 12px;
 }
 
@@ -268,7 +286,7 @@ footer {
   padding-left: 32px;
   font-weight: normal;
 
-  color: var(--dark2);
+  color: var(--muted);
   font-size: 12px;
 }
 
@@ -284,6 +302,6 @@ footer {
 }
 
 #not-found-message h1 {
-  color: var(--accent-red);
+  color: var(--accent);
   font-size: 3.5rem;
 }
