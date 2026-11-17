@@ -262,7 +262,7 @@ img[alt=Headshot] {
   margin-left: auto;
   margin-right: auto;
 
-  width: 67%;
+  width: min(67%, 350px);
 }
 
 a {
