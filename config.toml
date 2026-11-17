@@ -1,5 +1,5 @@
 baseURL = 'https://grantjurgensen.com'
-languageCode = 'en-us'
+locale = 'en-us'
 title = 'Grant Jurgensen'
 theme = 'gjurgensen'
 

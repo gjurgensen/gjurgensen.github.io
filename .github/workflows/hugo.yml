@@ -1,4 +1,9 @@
-# Sample workflow for building and deploying a Hugo site to GitHub Pages
+# Builds the site with a custom Hugo and deploys it to GitHub Pages.
+#
+# Hugo is compiled from source so that Chroma, its syntax highlighter, includes
+# the lexers in lexers/ (ACL2 is not in upstream Chroma; coq.xml overrides the
+# upstream Coq lexer). The compiled binary is cached, keyed on the Hugo version
+# and the lexer files, so it is only rebuilt when one of those changes.
 name: Deploy Hugo site to Pages
 
 on:
@@ -23,49 +28,64 @@ defaults:
   run:
     shell: bash
 
+env:
+  # Chroma is built at whatever version this Hugo release depends on.
+  HUGO_VERSION: v0.170.1
+
 jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Git, Go
-        run: |
-          sudo apt update -y \
-          && sudo apt install -y git \
-          && sudo snap install --classic go
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
+
+      - name: Restore cached Hugo
+        id: hugo-cache
+        uses: actions/cache@v6
         with:
-          submodules: recursive
-      - name: Install custom chroma
+          path: ${{ runner.temp }}/hugo-bin
+          key: hugo-${{ env.HUGO_VERSION }}-${{ hashFiles('lexers/**') }}
+
+      - name: Fetch Hugo and Chroma sources
+        if: steps.hugo-cache.outputs.cache-hit != 'true'
         run: |
-          git clone --depth 1 --branch v2.12.0 https://github.com/alecthomas/chroma.git ${{ runner.temp }}/chroma \
-          && command cp -f ${{ github.workspace }}/lexers/* ${{ runner.temp }}/chroma/lexers/embedded
-      - name: Install Hugo CLI
+          git clone --depth 1 --branch "$HUGO_VERSION" https://github.com/gohugoio/hugo.git "$RUNNER_TEMP/hugo"
+          chroma_version=$(awk '$1 == "github.com/alecthomas/chroma/v2" { print $2 }' "$RUNNER_TEMP/hugo/go.mod")
+          git clone --depth 1 --branch "$chroma_version" https://github.com/alecthomas/chroma.git "$RUNNER_TEMP/chroma"
+          cp -f lexers/* "$RUNNER_TEMP/chroma/lexers/embedded/"
+
+      - name: Set up Go
+        if: steps.hugo-cache.outputs.cache-hit != 'true'
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: ${{ runner.temp }}/hugo/go.mod
+          cache-dependency-path: ${{ runner.temp }}/hugo/go.sum
+
+      - name: Build Hugo with the custom lexers
+        if: steps.hugo-cache.outputs.cache-hit != 'true'
+        env:
+          CGO_ENABLED: "0"
         run: |
-          git clone --depth 1 --branch release-0.116.0 https://github.com/gohugoio/hugo.git ${{ runner.temp }}/hugo \
-          && cd ${{ runner.temp }}/hugo \
-          && go mod edit -replace github.com/alecthomas/chroma/v2=${{ runner.temp }}/chroma \
-          && go mod tidy \
-          && go build
-      - name: Install Dart Sass Embedded
-        run: sudo snap install dart-sass-embedded
+          cd "$RUNNER_TEMP/hugo"
+          go mod edit -replace "github.com/alecthomas/chroma/v2=$RUNNER_TEMP/chroma"
+          go build -o "$RUNNER_TEMP/hugo-bin/hugo" .
+
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v3
-      - name: Install Node.js dependencies
-        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
+        uses: actions/configure-pages@v6
+
       - name: Build with Hugo
         env:
-          # For maximum backward compatibility with Hugo modules
           HUGO_ENVIRONMENT: production
-          HUGO_ENV: production
         run: |
-          ${{ runner.temp }}/hugo/hugo \
+          "$RUNNER_TEMP/hugo-bin/hugo" version
+          "$RUNNER_TEMP/hugo-bin/hugo" \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
@@ -80,4 +100,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
