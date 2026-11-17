@@ -26,165 +26,87 @@
   /* font-size: 16px; */
 }
 
-/* Other */ .chroma .x {  }
-/* Error */ .chroma .err { color: var(--syn-keyword); }
-/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
-/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
-/* LineHighlight */ .chroma .hl { display: block; width: 100%;background-color: var(--border) }
-/* LineNumbersTable */ .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: var(--muted) }
-/* LineNumbers */ .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: var(--muted) }
-/* Keyword */ .chroma .k { color: var(--syn-keyword); }
-/* KeywordConstant */ .chroma .kc { color: var(--syn-number); }
-/* KeywordDeclaration */ .chroma .kd { color: var(--syn-keyword); }
-/* KeywordNamespace */ .chroma .kn { color: var(--syn-keyword); }
-/* KeywordPseudo */ .chroma .kp { color: var(--syn-type); }
-/* KeywordReserved */ .chroma .kr { color: var(--syn-keyword); }
-/* KeywordType */ .chroma .kt { color: var(--syn-type); }
-/* Name */ .chroma .n {  }
-/* NameAttribute */ .chroma .na { color: var(--syn-function); }
-/* NameBuiltin */ .chroma .nb {  }
-/* NameBuiltinPseudo */ .chroma .bp {  }
-/* NameClass */ .chroma .nc { color: var(--syn-type); }
-/* NameConstant */ .chroma .no { color: var(--syn-type); }
-/* NameDecorator */ .chroma .nd { color: var(--syn-function); }
-/* NameEntity */ .chroma .ni {  }
-/* NameException */ .chroma .ne { color: var(--syn-type); }
-/* NameFunction */ .chroma .nf { color: var(--syn-function); }
-/* NameFunctionMagic */ .chroma .fm {  }
-/* NameLabel */ .chroma .nl {  }
-/* NameNamespace */ .chroma .nn {  }
-/* NameOther */ .chroma .nx { color: var(--syn-function); }
-/* NameProperty */ .chroma .py {  }
-/* NameTag */ .chroma .nt { color: var(--syn-keyword); }
-/* NameVariable */ .chroma .nv {  }
-/* NameVariableClass */ .chroma .vc {  }
-/* NameVariableGlobal */ .chroma .vg {  }
-/* NameVariableInstance */ .chroma .vi {  }
-/* NameVariableMagic */ .chroma .vm {  }
-/* Literal */ .chroma .l { color: var(--syn-number); }
-/* LiteralDate */ .chroma .ld { color: var(--syn-string); }
-/* LiteralString */ .chroma .s { color: var(--syn-string); }
-/* LiteralStringAffix */ .chroma .sa { color: var(--syn-string); }
-/* LiteralStringBacktick */ .chroma .sb { color: var(--syn-string); }
-/* LiteralStringChar */ .chroma .sc { color: var(--syn-string); }
-/* LiteralStringDelimiter */ .chroma .dl { color: var(--syn-string); }
-/* LiteralStringDoc */ .chroma .sd { color: var(--syn-string); }
-/* LiteralStringDouble */ .chroma .s2 { color: var(--syn-string); }
-/* LiteralStringEscape */ .chroma .se { color: var(--syn-number); }
-/* LiteralStringHeredoc */ .chroma .sh { color: var(--syn-string); }
-/* LiteralStringInterpol */ .chroma .si { color: var(--syn-string); }
-/* LiteralStringOther */ .chroma .sx { color: var(--syn-string); }
-/* LiteralStringRegex */ .chroma .sr { color: var(--syn-string); }
-/* LiteralStringSingle */ .chroma .s1 { color: var(--syn-string); }
-/* LiteralStringSymbol */ .chroma .ss { color: var(--syn-string); }
-/* LiteralNumber */ .chroma .m { color: var(--syn-number); }
-/* LiteralNumberBin */ .chroma .mb { color: var(--syn-number); }
-/* LiteralNumberFloat */ .chroma .mf { color: var(--syn-number); }
-/* LiteralNumberHex */ .chroma .mh { color: var(--syn-number); }
-/* LiteralNumberInteger */ .chroma .mi { color: var(--syn-number); }
-/* LiteralNumberIntegerLong */ .chroma .il { color: var(--syn-number); }
-/* LiteralNumberOct */ .chroma .mo { color: var(--syn-number); }
-/* Operator */ .chroma .o {  }
-/* OperatorWord */ .chroma .ow {  }
-/* Punctuation */ .chroma .p { color: var(--muted); }
-/* Comment */ .chroma .c { color: var(--muted); font-style: italic; }
-/* CommentHashbang */ .chroma .ch { color: var(--muted); }
-/* CommentMultiline */ .chroma .cm { color: var(--muted); font-style: italic; }
-/* CommentSingle */ .chroma .c1 { color: var(--muted); font-style: italic; }
-/* CommentSpecial */ .chroma .cs { color: var(--muted); font-style: italic; }
-/* CommentPreproc */ .chroma .cp { color: var(--muted); font-style: italic; }
-/* CommentPreprocFile */ .chroma .cpf { color: var(--muted); font-style: italic; }
-/* Generic */ .chroma .g {  }
-/* GenericDeleted */ .chroma .gd { color: var(--syn-keyword); }
-/* GenericEmph */ .chroma .ge { font-style: italic }
-/* GenericError */ .chroma .gr {  }
-/* GenericHeading */ .chroma .gh {  }
-/* GenericInserted */ .chroma .gi { color: var(--syn-string); }
-/* GenericOutput */ .chroma .go {  }
-/* GenericPrompt */ .chroma .gp {  }
-/* GenericStrong */ .chroma .gs { font-weight: bold }
-/* GenericSubheading */ .chroma .gu { color: var(--muted); }
-/* GenericTraceback */ .chroma .gt {  }
-/* GenericUnderline */ .chroma .gl {  }
-/* TextWhitespace */ .chroma .w {  }
+/* Token colours, shared by code blocks (.chroma) and highlighted inline
+   code (.code-inline). */
+/* Other */ :is(.chroma, .code-inline) .x {  }
+/* Error */ :is(.chroma, .code-inline) .err { color: var(--syn-keyword); }
+/* LineTableTD */ :is(.chroma, .code-inline) .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ :is(.chroma, .code-inline) .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
+/* LineHighlight */ :is(.chroma, .code-inline) .hl { display: block; width: 100%;background-color: var(--border) }
+/* LineNumbersTable */ :is(.chroma, .code-inline) .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: var(--muted) }
+/* LineNumbers */ :is(.chroma, .code-inline) .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: var(--muted) }
+/* Keyword */ :is(.chroma, .code-inline) .k { color: var(--syn-keyword); }
+/* KeywordConstant */ :is(.chroma, .code-inline) .kc { color: var(--syn-number); }
+/* KeywordDeclaration */ :is(.chroma, .code-inline) .kd { color: var(--syn-keyword); }
+/* KeywordNamespace */ :is(.chroma, .code-inline) .kn { color: var(--syn-keyword); }
+/* KeywordPseudo */ :is(.chroma, .code-inline) .kp { color: var(--syn-type); }
+/* KeywordReserved */ :is(.chroma, .code-inline) .kr { color: var(--syn-keyword); }
+/* KeywordType */ :is(.chroma, .code-inline) .kt { color: var(--syn-type); }
+/* Name */ :is(.chroma, .code-inline) .n {  }
+/* NameAttribute */ :is(.chroma, .code-inline) .na { color: var(--syn-function); }
+/* NameBuiltin */ :is(.chroma, .code-inline) .nb {  }
+/* NameBuiltinPseudo */ :is(.chroma, .code-inline) .bp {  }
+/* NameClass */ :is(.chroma, .code-inline) .nc { color: var(--syn-type); }
+/* NameConstant */ :is(.chroma, .code-inline) .no { color: var(--syn-type); }
+/* NameDecorator */ :is(.chroma, .code-inline) .nd { color: var(--syn-function); }
+/* NameEntity */ :is(.chroma, .code-inline) .ni {  }
+/* NameException */ :is(.chroma, .code-inline) .ne { color: var(--syn-type); }
+/* NameFunction */ :is(.chroma, .code-inline) .nf { color: var(--syn-function); }
+/* NameFunctionMagic */ :is(.chroma, .code-inline) .fm {  }
+/* NameLabel */ :is(.chroma, .code-inline) .nl {  }
+/* NameNamespace */ :is(.chroma, .code-inline) .nn {  }
+/* NameOther */ :is(.chroma, .code-inline) .nx { color: var(--syn-function); }
+/* NameProperty */ :is(.chroma, .code-inline) .py {  }
+/* NameTag */ :is(.chroma, .code-inline) .nt { color: var(--syn-keyword); }
+/* NameVariable */ :is(.chroma, .code-inline) .nv {  }
+/* NameVariableClass */ :is(.chroma, .code-inline) .vc {  }
+/* NameVariableGlobal */ :is(.chroma, .code-inline) .vg {  }
+/* NameVariableInstance */ :is(.chroma, .code-inline) .vi {  }
+/* NameVariableMagic */ :is(.chroma, .code-inline) .vm {  }
+/* Literal */ :is(.chroma, .code-inline) .l { color: var(--syn-number); }
+/* LiteralDate */ :is(.chroma, .code-inline) .ld { color: var(--syn-string); }
+/* LiteralString */ :is(.chroma, .code-inline) .s { color: var(--syn-string); }
+/* LiteralStringAffix */ :is(.chroma, .code-inline) .sa { color: var(--syn-string); }
+/* LiteralStringBacktick */ :is(.chroma, .code-inline) .sb { color: var(--syn-string); }
+/* LiteralStringChar */ :is(.chroma, .code-inline) .sc { color: var(--syn-string); }
+/* LiteralStringDelimiter */ :is(.chroma, .code-inline) .dl { color: var(--syn-string); }
+/* LiteralStringDoc */ :is(.chroma, .code-inline) .sd { color: var(--syn-string); }
+/* LiteralStringDouble */ :is(.chroma, .code-inline) .s2 { color: var(--syn-string); }
+/* LiteralStringEscape */ :is(.chroma, .code-inline) .se { color: var(--syn-number); }
+/* LiteralStringHeredoc */ :is(.chroma, .code-inline) .sh { color: var(--syn-string); }
+/* LiteralStringInterpol */ :is(.chroma, .code-inline) .si { color: var(--syn-string); }
+/* LiteralStringOther */ :is(.chroma, .code-inline) .sx { color: var(--syn-string); }
+/* LiteralStringRegex */ :is(.chroma, .code-inline) .sr { color: var(--syn-string); }
+/* LiteralStringSingle */ :is(.chroma, .code-inline) .s1 { color: var(--syn-string); }
+/* LiteralStringSymbol */ :is(.chroma, .code-inline) .ss { color: var(--syn-string); }
+/* LiteralNumber */ :is(.chroma, .code-inline) .m { color: var(--syn-number); }
+/* LiteralNumberBin */ :is(.chroma, .code-inline) .mb { color: var(--syn-number); }
+/* LiteralNumberFloat */ :is(.chroma, .code-inline) .mf { color: var(--syn-number); }
+/* LiteralNumberHex */ :is(.chroma, .code-inline) .mh { color: var(--syn-number); }
+/* LiteralNumberInteger */ :is(.chroma, .code-inline) .mi { color: var(--syn-number); }
+/* LiteralNumberIntegerLong */ :is(.chroma, .code-inline) .il { color: var(--syn-number); }
+/* LiteralNumberOct */ :is(.chroma, .code-inline) .mo { color: var(--syn-number); }
+/* Operator */ :is(.chroma, .code-inline) .o {  }
+/* OperatorWord */ :is(.chroma, .code-inline) .ow {  }
+/* Punctuation */ :is(.chroma, .code-inline) .p { color: var(--muted); }
+/* Comment */ :is(.chroma, .code-inline) .c { color: var(--muted); font-style: italic; }
+/* CommentHashbang */ :is(.chroma, .code-inline) .ch { color: var(--muted); }
+/* CommentMultiline */ :is(.chroma, .code-inline) .cm { color: var(--muted); font-style: italic; }
+/* CommentSingle */ :is(.chroma, .code-inline) .c1 { color: var(--muted); font-style: italic; }
+/* CommentSpecial */ :is(.chroma, .code-inline) .cs { color: var(--muted); font-style: italic; }
+/* CommentPreproc */ :is(.chroma, .code-inline) .cp { color: var(--muted); font-style: italic; }
+/* CommentPreprocFile */ :is(.chroma, .code-inline) .cpf { color: var(--muted); font-style: italic; }
+/* Generic */ :is(.chroma, .code-inline) .g {  }
+/* GenericDeleted */ :is(.chroma, .code-inline) .gd { color: var(--syn-keyword); }
+/* GenericEmph */ :is(.chroma, .code-inline) .ge { font-style: italic }
+/* GenericError */ :is(.chroma, .code-inline) .gr {  }
+/* GenericHeading */ :is(.chroma, .code-inline) .gh {  }
+/* GenericInserted */ :is(.chroma, .code-inline) .gi { color: var(--syn-string); }
+/* GenericOutput */ :is(.chroma, .code-inline) .go {  }
+/* GenericPrompt */ :is(.chroma, .code-inline) .gp {  }
+/* GenericStrong */ :is(.chroma, .code-inline) .gs { font-weight: bold }
+/* GenericSubheading */ :is(.chroma, .code-inline) .gu { color: var(--muted); }
+/* GenericTraceback */ :is(.chroma, .code-inline) .gt {  }
+/* GenericUnderline */ :is(.chroma, .code-inline) .gl {  }
+/* TextWhitespace */ :is(.chroma, .code-inline) .w {  }
 
-/* Other */ .code-inline .x {  }
-/* Error */ .code-inline .err { color: var(--syn-keyword); }
-/* LineTableTD */ .code-inline .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
-/* LineTable */ .code-inline .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
-/* LineHighlight */ .code-inline .hl { display: block; width: 100%;background-color: var(--border) }
-/* LineNumbersTable */ .code-inline .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: var(--muted) }
-/* LineNumbers */ .code-inline .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: var(--muted) }
-/* Keyword */ .code-inline .k { color: var(--syn-keyword); }
-/* KeywordConstant */ .code-inline .kc { color: var(--syn-number); }
-/* KeywordDeclaration */ .code-inline .kd { color: var(--syn-keyword); }
-/* KeywordNamespace */ .code-inline .kn { color: var(--syn-keyword); }
-/* KeywordPseudo */ .code-inline .kp { color: var(--syn-type); }
-/* KeywordReserved */ .code-inline .kr { color: var(--syn-keyword); }
-/* KeywordType */ .code-inline .kt { color: var(--syn-type); }
-/* Name */ .code-inline .n {  }
-/* NameAttribute */ .code-inline .na { color: var(--syn-function); }
-/* NameBuiltin */ .code-inline .nb {  }
-/* NameBuiltinPseudo */ .code-inline .bp {  }
-/* NameClass */ .code-inline .nc { color: var(--syn-type); }
-/* NameConstant */ .code-inline .no { color: var(--syn-type); }
-/* NameDecorator */ .code-inline .nd { color: var(--syn-function); }
-/* NameEntity */ .code-inline .ni {  }
-/* NameException */ .code-inline .ne { color: var(--syn-type); }
-/* NameFunction */ .code-inline .nf { color: var(--syn-function); }
-/* NameFunctionMagic */ .code-inline .fm {  }
-/* NameLabel */ .code-inline .nl {  }
-/* NameNamespace */ .code-inline .nn {  }
-/* NameOther */ .code-inline .nx { color: var(--syn-function); }
-/* NameProperty */ .code-inline .py {  }
-/* NameTag */ .code-inline .nt { color: var(--syn-keyword); }
-/* NameVariable */ .code-inline .nv {  }
-/* NameVariableClass */ .code-inline .vc {  }
-/* NameVariableGlobal */ .code-inline .vg {  }
-/* NameVariableInstance */ .code-inline .vi {  }
-/* NameVariableMagic */ .code-inline .vm {  }
-/* Literal */ .code-inline .l { color: var(--syn-number); }
-/* LiteralDate */ .code-inline .ld { color: var(--syn-string); }
-/* LiteralString */ .code-inline .s { color: var(--syn-string); }
-/* LiteralStringAffix */ .code-inline .sa { color: var(--syn-string); }
-/* LiteralStringBacktick */ .code-inline .sb { color: var(--syn-string); }
-/* LiteralStringChar */ .code-inline .sc { color: var(--syn-string); }
-/* LiteralStringDelimiter */ .code-inline .dl { color: var(--syn-string); }
-/* LiteralStringDoc */ .code-inline .sd { color: var(--syn-string); }
-/* LiteralStringDouble */ .code-inline .s2 { color: var(--syn-string); }
-/* LiteralStringEscape */ .code-inline .se { color: var(--syn-number); }
-/* LiteralStringHeredoc */ .code-inline .sh { color: var(--syn-string); }
-/* LiteralStringInterpol */ .code-inline .si { color: var(--syn-string); }
-/* LiteralStringOther */ .code-inline .sx { color: var(--syn-string); }
-/* LiteralStringRegex */ .code-inline .sr { color: var(--syn-string); }
-/* LiteralStringSingle */ .code-inline .s1 { color: var(--syn-string); }
-/* LiteralStringSymbol */ .code-inline .ss { color: var(--syn-string); }
-/* LiteralNumber */ .code-inline .m { color: var(--syn-number); }
-/* LiteralNumberBin */ .code-inline .mb { color: var(--syn-number); }
-/* LiteralNumberFloat */ .code-inline .mf { color: var(--syn-number); }
-/* LiteralNumberHex */ .code-inline .mh { color: var(--syn-number); }
-/* LiteralNumberInteger */ .code-inline .mi { color: var(--syn-number); }
-/* LiteralNumberIntegerLong */ .code-inline .il { color: var(--syn-number); }
-/* LiteralNumberOct */ .code-inline .mo { color: var(--syn-number); }
-/* Operator */ .code-inline .o {  }
-/* OperatorWord */ .code-inline .ow {  }
-/* Punctuation */ .code-inline .p { color: var(--muted); }
-/* Comment */ .code-inline .c { color: var(--muted); font-style: italic; }
-/* CommentHashbang */ .code-inline .ch { color: var(--muted); }
-/* CommentMultiline */ .code-inline .cm { color: var(--muted); font-style: italic; }
-/* CommentSingle */ .code-inline .c1 { color: var(--muted); font-style: italic; }
-/* CommentSpecial */ .code-inline .cs { color: var(--muted); font-style: italic; }
-/* CommentPreproc */ .code-inline .cp { color: var(--muted); font-style: italic; }
-/* CommentPreprocFile */ .code-inline .cpf { color: var(--muted); font-style: italic; }
-/* Generic */ .code-inline .g {  }
-/* GenericDeleted */ .code-inline .gd { color: var(--syn-keyword); }
-/* GenericEmph */ .code-inline .ge { font-style: italic }
-/* GenericError */ .code-inline .gr {  }
-/* GenericHeading */ .code-inline .gh {  }
-/* GenericInserted */ .code-inline .gi { color: var(--syn-string); }
-/* GenericOutput */ .code-inline .go {  }
-/* GenericPrompt */ .code-inline .gp {  }
-/* GenericStrong */ .code-inline .gs { font-weight: bold }
-/* GenericSubheading */ .code-inline .gu { color: var(--muted); }
-/* GenericTraceback */ .code-inline .gt {  }
-/* GenericUnderline */ .code-inline .gl {  }
