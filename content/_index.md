@@ -6,7 +6,7 @@ draft: false
 
 ![Headshot](/images/headshot_circle2_small.webp)
 
-Hi! I'm a Computer Scientist at Kestrel Institute, working on projects related to formal verification. Before that, I was doing similar research at the University of Kansas while pursuing my Master's degree. My interests broadly include formal methods, functional programming, and type theory.
+Hi! I'm a Computer Scientist at Kestrel Institute, working on projects related to formal verification. Lately, I've been a heavy user of the [ACL2 theorem prover](https://www.cs.utexas.edu/~moore/acl2/). Before Kestrel, I did similar research at the University of Kansas while pursuing my Master's degree. My interests broadly include formal methods, functional programming, and type theory.
 
 - [Résumé](/documents/resume.pdf)
 - [GitHub profile](https://github.com/gjurgensen)
